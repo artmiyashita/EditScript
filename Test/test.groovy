@@ -8,8 +8,14 @@ if(!env.multiLayout) {
 
 //独自の刺し込み処理
 def myInjectionOne(cassette, record, labelList, imageTable) {
+
+  //基本関数
+ labelList.each {
+   injectionOneParts(cassette, it , record, imageTable);
+ }
+
   //ラベルの追加
-  def additionalLabelList = ["結合住所"];
+  def additionalLabelList1 = ["結合住所"];
 
   //表面住所データ結合
   def postnum = record['郵便番号'];
@@ -19,15 +25,24 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
 
   record['結合住所'] = address;
 
-  //基本関数
- labelList.each {
+ //追加ラベルへの差し込み
+ additionalLabelList1.each{
    injectionOneParts(cassette, it , record, imageTable);
  }
 
- //追加ラベルへの差し込み
- additionalLabelList.each{
-   injectionOneParts(cassette, it , record, imageTable);
- }
+  //姓名字取り
+  def additionalLabelList2 = ["氏名"];
+
+  def fname = record['姓'];
+  def lname = record['名'];
+  def names = fname + ' ' + lname;
+
+  record['氏名'] = names;
+
+  //追加ラベルへの差し込み
+  additionalLabelList2.each{
+    injectionOneParts(cassette, it , record, imageTable);
+  }
 
   //表面の判定
   def omote = getPartsByLabel('肩書き1', 1, cassette) ;

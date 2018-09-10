@@ -33,10 +33,18 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   //姓名字取り
   def additionalLabelList2 = ["氏名"];
 
-  def fname = record['姓'];
-  def lname = record['名'];
-  def names = fname + ' ' + lname;
+  StringBuilder fname = record['姓'];
+  StringBuilder gname = record['名'];
+  def fgspan = '＿';
 
+  if (fname.length() == 2 && gname.length() == 2)
+  {
+    fgspan = '　';
+  } else {
+    fgspan = ' ';
+  }
+
+  def names = fname + fgspan + gname;
   record['氏名'] = names;
 
   //追加ラベルへの差し込み

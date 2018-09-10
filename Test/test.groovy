@@ -6,6 +6,19 @@ if(!env.multiLayout) {
  doProduce(2, env.imageTable); // ページ数 1
 }
 
+// メソッドの定義
+def insertspan(sei,mei,seispan,smspan,meispan){
+  for (int i = 1; i < sei.length(); i+=2)
+  {
+    sei.insert(i,seispan);
+  }
+  for (int i = 1; i < mei.length(); i+=2)
+  {
+    mei.insert(i,meispan);
+  }
+  sei + smspan + mei;
+}
+
 //独自の刺し込み処理
 def myInjectionOne(cassette, record, labelList, imageTable) {
 
@@ -39,26 +52,30 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   StringBuilder mei = new StringBuilder();
   mei.append(record['名']);
 
-  def seispan = '_';
-  def smspan = '＿';
-  def meispan = '_';
+  def seispan = '';
+  def smspan = ' ';
+  def meispan = '';
+  def shimei = '';
 
-  if (sei.length() == 3 && mei.length() == 3)
+  if (sei.length() == 2 && mei.length() == 2)
   {
+    seispan = ' ';
     smspan = '　';
-    for (int i = 1; i < sei.length(); i+=2)
-    {
-      sei.insert(i,seispan);
-    }
-    for (int i = 1; i < mei.length(); i+=2)
-    {
-      mei.insert(i,meispan);
-    }
-  } else {
+    meispan = ' ';
+    shimei  = insertspan(sei,mei,seispan,smspan,meispan)
+  }
+  else if (sei.length() == 3 && mei.length() == 3)
+  {
+    seispan = '';
     smspan = ' ';
+    meispan = '';
+    shimei  = insertspan(sei,mei,seispan,smspan,meispan)
+  }
+  else
+  {
+    shimei  = insertspan(sei,mei,seispan,smspan,meispan)
   }
 
-  def shimei = sei + smspan + mei;
   record['氏名'] = shimei;
 
   //追加ラベルへの差し込み

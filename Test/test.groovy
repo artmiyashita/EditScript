@@ -32,6 +32,7 @@ def addressfall(r,p,b,s,h){
     s += h;
   }
 }
+//暫定戻り値
 def spanheight(s,h){
   xline = s + h;
 }

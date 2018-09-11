@@ -6,8 +6,9 @@ if(!env.multiLayout) {
  doProduce(2, env.imageTable); // ページ数 1
 }
 
-// メソッドの定義
-def insertspan(sei,mei,seispan,smspan,meispan){
+// <メソッドの定義>
+// 字取りメソッド
+def jidori(sei,mei,seispan,smspan,meispan){
   for (int i = 1; i < sei.length(); i+=2)
   {
     sei.insert(i,seispan);
@@ -27,23 +28,30 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
    injectionOneParts(cassette, it , record, imageTable);
  }
 
-  //ラベルの追加
+  //<表面住所データ結合>
   def additionalLabelList1 = ["結合住所"];
-
-  //表面住所データ結合
   def postnum = record['郵便番号'];
   def adr1 = record['住所1'];
   def adr2 = record['住所2'];
-  def address = postnum + adr1 + adr2;
-
+  def address = '〒' + postnum + ' ' + adr1 + adr2;
   record['結合住所'] = address;
 
- //追加ラベルへの差し込み
  additionalLabelList1.each{
    injectionOneParts(cassette, it , record, imageTable);
  }
 
-  //姓名字取り
+  //<表面電話番号結合>
+  def telfax1LabelList = ['TEL1結合'];
+  def tel1 = record['TEL1'];
+  def fax1 = record['FAX1'];
+  def telfax1= 'TEL ' + tel1 + '/FAX ' + fax1 ;
+  record['TEL1結合'] = telfax1;
+
+  telfax1LabelList.each{
+    injectionOneParts(cassette, it , record, imageTable);
+  }
+
+  //<姓名字取り>
   def additionalLabelList2 = ["氏名"];
 
   StringBuilder sei = new StringBuilder();
@@ -62,23 +70,22 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     seispan = ' ';
     smspan = '　';
     meispan = ' ';
-    shimei  = insertspan(sei,mei,seispan,smspan,meispan)
+    shimei  = jidori(sei,mei,seispan,smspan,meispan)
   }
   else if (sei.length() == 3 && mei.length() == 3)
   {
     seispan = '';
     smspan = ' ';
     meispan = '';
-    shimei  = insertspan(sei,mei,seispan,smspan,meispan)
+    shimei  = jidori(sei,mei,seispan,smspan,meispan)
   }
   else
   {
-    shimei  = insertspan(sei,mei,seispan,smspan,meispan)
+    shimei  = jidori(sei,mei,seispan,smspan,meispan)
   }
 
   record['氏名'] = shimei;
 
-  //追加ラベルへの差し込み
   additionalLabelList2.each{
     injectionOneParts(cassette, it , record, imageTable);
   }

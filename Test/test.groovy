@@ -29,14 +29,13 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
  }
 
   //<表面住所データ結合>
-  def add1lLabelList = ["結合住所"];
+  def adr1lLabelList = ["結合住所"];
   def postnum1 = record['郵便番号'];
   def adr1 = record['住所1'];
-  def adr12 = record['住所1の2行目'];
-  def address1 = '〒' + postnum1 + ' ' + adr1 + adr12;
+  def address1 = '〒' + postnum1 + ' ' + adr1;
   record['結合住所'] = address1;
 
- add1lLabelList.each{
+ adr1lLabelList.each{
    injectionOneParts(cassette, it , record, imageTable);
  }
 
@@ -52,13 +51,13 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   }
 
   //<表面住所データ結合2>
-  def add2LabelList = ["結合住所2"];
+  def adr2LabelList = ["結合住所2"];
   def postnum2 = record['郵便番号2'];
   def adr2 = record['住所2'];
   def address2 = '〒' + postnum2 + ' ' + adr2;
   record['結合住所2'] = address2;
 
- add2LabelList.each{
+ adr2LabelList.each{
    injectionOneParts(cassette, it , record, imageTable);
  }
 
@@ -140,20 +139,96 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     }
 
     //住所行が空の場合の定義
-    def pAdd1 = getPartsByLabel('結合住所1',1,cassette);
-    def pAdd12 = getPartsByLabel('住所1の2行目',1,cassette);
+    def url = record['URL'];
+    def adrName2 = record['住所2の名称'];
+    def email = record['Email'];
+    def mobile = record['携帯'];
+    def adr12 = record['住所1の2行目'];
+    def pAdr1 = getPartsByLabel('結合住所',1,cassette);
+    def pAdr12 = getPartsByLabel('住所1の2行目',1,cassette);
     def pTelFax1 = getPartsByLabel('TEL1結合',1,cassette);
     def pMobile1 = getPartsByLabel('携帯',1,cassette);
     def pEmail1 = getPartsByLabel('Email',1,cassette);
-    def pAddName2 = getPartsByLabel('住所2の名称',1,cassette);
-    def pAdd2 = getPartsByLabel('住所2',1,cassette);
+    def pAdrName2 = getPartsByLabel('住所2の名称',1,cassette);
+    def pAdr2 = getPartsByLabel('住所2',1,cassette);
     def pTelFax2 = getPartsByLabel('TEL2結合',1,cassette);
     def pURL = getPartsByLabel('URL',1,cassette);
+    def linespan = 0;
+    def lineheight = 2.5;
+    def baseLine = 51;
 
-    pTelFax2.transform.translateY = pURL.boundBox.y;
-
-    def url = record['URL'];
-    if(url=='なし'){pURL.setDisplay("none")};
+    pURL.transform.translateY = baseLine;
+    if(url=='なし'){
+      pURL.setDisplay("none");
+    }
+    else
+    {
+      linespan += lineheight;
+    }
+    pTelFax2.transform.translateY = baseLine - linespan;
+    if(telfax2==''){
+      pTelFax2.setDisplay("none");
+    }
+    else
+    {
+      linespan += lineheight;
+    }
+    pAdr2.transform.translateY = baseLine - linespan;
+    if(adr2==''){
+      pAdr2.setDisplay("none");
+    }
+    else
+    {
+      linespan += lineheight;
+    }
+    pAdrName2.transform.translateY = baseLine - linespan;
+    if(adrName2==''){
+      pAdrName2.setDisplay("none");
+    }
+    else
+    {
+      linespan += lineheight;
+    }
+    pEmail1.transform.translateY = baseLine - linespan;
+    if(email==''){
+      pEmail1.setDisplay("none");
+    }
+    else
+    {
+      linespan += lineheight;
+    }
+    pMobile1.transform.translateY = baseLine - linespan;
+    if(mobile==''){
+      pMobile1.setDisplay("none");
+    }
+    else
+    {
+      linespan += lineheight;
+    }
+    pTelFax1.transform.translateY = baseLine - linespan;
+    if(telfax1==''){
+      pTelFax1.setDisplay("none");
+    }
+    else
+    {
+      linespan += lineheight;
+    }
+    pAdr12.transform.translateY = baseLine - linespan;
+    if(adr12==''){
+      pAdr12.setDisplay("none");
+    }
+    else
+    {
+      linespan += lineheight;
+    }
+    pAdr1.transform.translateY = baseLine - linespan;
+    if(adr1==''){
+      pAdr1.setDisplay("none");
+    }
+    else
+    {
+      linespan += lineheight;
+    }
 
 
   }else{

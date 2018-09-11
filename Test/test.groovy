@@ -30,11 +30,11 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
 
   //<表面住所データ結合>
   def add1lLabelList = ["結合住所"];
-  def postnum = record['郵便番号'];
+  def postnum1 = record['郵便番号'];
   def adr1 = record['住所1'];
-  def adr2 = record['住所2'];
-  def address = '〒' + postnum + ' ' + adr1 + adr2;
-  record['結合住所'] = address;
+  def adr12 = record['住所1の2行目'];
+  def address1 = '〒' + postnum1 + ' ' + adr1 + adr12;
+  record['結合住所'] = address1;
 
  add1lLabelList.each{
    injectionOneParts(cassette, it , record, imageTable);
@@ -54,16 +54,15 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   //<表面住所データ結合2>
   def add2LabelList = ["結合住所2"];
   def postnum2 = record['郵便番号2'];
-  def adr1 = record['住所1'];
   def adr2 = record['住所2'];
-  def address2 = '〒' + postnum + ' ' + adr1 + adr2;
-  record['結合住所2'] = address;
+  def address2 = '〒' + postnum2 + ' ' + adr2;
+  record['結合住所2'] = address2;
 
  add2LabelList.each{
    injectionOneParts(cassette, it , record, imageTable);
  }
 
-  //<表面電話番号結合>
+  //<表面電話番号結合2>
   def telfax2LabelList = ['TEL2結合'];
   def tel2 = record['TEL2'];
   def fax2 = record['FAX2'];
@@ -73,6 +72,15 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   telfax2LabelList.each{
     injectionOneParts(cassette, it , record, imageTable);
   }
+
+  //画像
+  def pImageLabelList = ['ISOロゴ'];
+  pImage = 'c64cf821c0a800292cdae106bc9f1b37';
+  record['ISOロゴ'] = pImage;
+  pImageLabelList.each{
+    injectionOneParts(cassette, it , record, imageTable);
+  }
+
   //<姓名字取り>
   def additionalLabelList2 = ["氏名"];
   StringBuilder sei = new StringBuilder();

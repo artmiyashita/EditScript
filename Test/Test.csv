@@ -1,6 +1,7 @@
-配送先,ID,姓,名,姓ルビ,名ルビ,肩書き1,肩書き2,肩書き3,郵便番号,住所1,住所1の2行目,TEL1,FAX1,Email,URL,郵便番号2,住所2,TEL2,FAX2,ISO
-,auto[########],label,,,,,,,,,,,,,select,,,,,
-select,,,,,,,,,,,,,,,http://www.test-corp.co.jp,,,,,
-select,,,,,,,,,,,,,,,http://www.test-corp.special.co.jp,,,,,
-select,,,,,,,,,,,,,,,http://www.test3-corp.co.jp,,,,,
-,,田中,太郎,タナカ,タロウ,肩書き1,肩書き2,肩書き3,〒105-0014,東京都港区芝3-3-15,芝MONTビル,03-3454-3437,03-3454-1811,t-tanaka@test.co.jp,http://www.test-corp.co.jp,153-0063,東京都目黒区目黒４丁目4-22,03-1234-5678,03-1234-6789,
+配送先,ID,姓,名,姓ルビ,名ルビ,肩書き1,肩書き2,肩書き3,郵便番号,住所1,住所1の2行目,TEL1,FAX1,Email,携帯,郵便番号2,住所2,TEL2,FAX2,URL,ISO
+,auto[########],label,,,,,,,,,,,,,,,,,,select,select
+select,,,,,,,,,,,,,,,,,,,,http://www.test-corp.co.jp,なし
+select,,,,,,,,,,,,,,,,,,,,http://www.test-corp.special.co.jp,あり
+select,,,,,,,,,,,,,,,,,,,,http://www.test3-corp.co.jp,
+select,,,,,,,,,,,,,,,,,,,,なし,
+,,田中,太郎,タナカ,タロウ,肩書き1,肩書き2,肩書き3,105-0014,東京都港区芝3-3-15,芝MONTビル,03-3454-3437,03-3454-1811,t-tanaka@test.co.jp,080-0000-0000,153-0063,東京都目黒区目黒４丁目4-22,03-1234-5678,03-1234-6789,http://www.test-corp.co.jp,なし

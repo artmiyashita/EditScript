@@ -88,9 +88,9 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   StringBuilder mei = new StringBuilder();
   mei.append(record['名']);
 
-  def seispan = '';
+  def seispan = ' ';
   def smspan = ' ';
-  def meispan = '';
+  def meispan = ' ';
   def shimei = '';
 
   if (sei.length() == 2 && mei.length() == 2)
@@ -138,6 +138,24 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     if(title2.param.text == '' && title3.param.text == ''){
       title1.transform.translateY = 21;
     }
+
+    //住所行が空の場合の定義
+    def pAdd1 = getPartsByLabel('結合住所1',1,cassette);
+    def pAdd12 = getPartsByLabel('住所1の2行目',1,cassette);
+    def pTelFax1 = getPartsByLabel('TEL1結合',1,cassette);
+    def pMobile1 = getPartsByLabel('携帯',1,cassette);
+    def pEmail1 = getPartsByLabel('Email',1,cassette);
+    def pAddName2 = getPartsByLabel('住所2の名称',1,cassette);
+    def pAdd2 = getPartsByLabel('住所2',1,cassette);
+    def pTelFax2 = getPartsByLabel('TEL2結合',1,cassette);
+    def pURL = getPartsByLabel('URL',1,cassette);
+
+    pTelFax2.transform.translateY = pURL.boundBox.y;
+
+    def url = record['URL'];
+    if(url=='なし'){pURL.setDisplay("none")};
+
+
   }else{
     //裏面のパーツ操作スクリプト
   }

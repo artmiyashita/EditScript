@@ -29,14 +29,14 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
  }
 
   //<表面住所データ結合>
-  def additionalLabelList1 = ["結合住所"];
+  def add1lLabelList = ["結合住所"];
   def postnum = record['郵便番号'];
   def adr1 = record['住所1'];
   def adr2 = record['住所2'];
   def address = '〒' + postnum + ' ' + adr1 + adr2;
   record['結合住所'] = address;
 
- additionalLabelList1.each{
+ add1lLabelList.each{
    injectionOneParts(cassette, it , record, imageTable);
  }
 
@@ -51,12 +51,32 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     injectionOneParts(cassette, it , record, imageTable);
   }
 
+  //<表面住所データ結合2>
+  def add2LabelList = ["結合住所2"];
+  def postnum2 = record['郵便番号2'];
+  def adr1 = record['住所1'];
+  def adr2 = record['住所2'];
+  def address2 = '〒' + postnum + ' ' + adr1 + adr2;
+  record['結合住所2'] = address;
+
+ add2LabelList.each{
+   injectionOneParts(cassette, it , record, imageTable);
+ }
+
+  //<表面電話番号結合>
+  def telfax2LabelList = ['TEL2結合'];
+  def tel2 = record['TEL2'];
+  def fax2 = record['FAX2'];
+  def telfax2= 'TEL ' + tel2 + '/FAX ' + fax2 ;
+  record['TEL2結合'] = telfax2;
+
+  telfax2LabelList.each{
+    injectionOneParts(cassette, it , record, imageTable);
+  }
   //<姓名字取り>
   def additionalLabelList2 = ["氏名"];
-
   StringBuilder sei = new StringBuilder();
   sei.append(record['姓']);
-
   StringBuilder mei = new StringBuilder();
   mei.append(record['名']);
 

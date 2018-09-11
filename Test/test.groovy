@@ -20,6 +20,25 @@ def jidori(sei,mei,seispan,smspan,meispan){
   sei + smspan + mei;
 }
 
+//テスト
+//住所欄段落自動繰り下げメソッド
+def addressfall(r,p,b,s,h){
+  p.transform.translateY = b - s;
+  if(r==''){
+    p.setDisplay("none");
+  }
+  else
+  {
+    s += h;
+  }
+}
+def spanheight(s,h){
+  xline = s + h;
+}
+def displaynone(p){
+  p.setDisplay("none");
+}
+
 //独自の刺し込み処理
 def myInjectionOne(cassette, record, labelList, imageTable) {
 
@@ -163,7 +182,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     }
     else
     {
-      linespan += lineheight;
+      linespan = lineheight;
     }
     pTelFax2.transform.translateY = baseLine - linespan;
     if(telfax2==''){
@@ -213,21 +232,24 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     {
       linespan += lineheight;
     }
+    //addressfall(adr12 ,pAdr12 ,baseLine ,linespan ,lineheight)
+
     pAdr12.transform.translateY = baseLine - linespan;
     if(adr12==''){
-      pAdr12.setDisplay("none");
+      displaynone(pAdr12);
     }
     else
     {
-      linespan += lineheight;
+      spanheight(linespan,lineheight);
     }
-    pAdr1.transform.translateY = baseLine - linespan;
+
+    pAdr1.transform.translateY = baseLine - xline;
     if(adr1==''){
       pAdr1.setDisplay("none");
     }
     else
     {
-      linespan += lineheight;
+      spanheight(linespan,lineheight);
     }
 
 

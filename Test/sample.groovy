@@ -15,6 +15,10 @@ def insertspan(sei,mei,seispan,smspan,meispan){
   sei + smspan + mei;
 }
 
+int spanheight(s,h){
+  x = s + h;
+}
+
 // メソッドの呼び出し
 def a=100;
 def b=350;
@@ -31,3 +35,7 @@ def seispan = '_', smspan = '＿', meispan = '_';
 def Shimei  = insertspan(sei,mei,seispan,smspan,meispan)
 
 println Shimei
+
+spanheight(a,b)
+
+println x

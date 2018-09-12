@@ -20,7 +20,6 @@ def jidori(sei,mei,seispan,smspan,meispan){
   sei + smspan + mei;
 }
 
-//テスト
 //住所欄段落自動繰り下げメソッド
 def addressfall(r,p,baseLine,linespan,lineheight){
   p.transform.translateY = baseLine - linespan;
@@ -41,52 +40,54 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
  labelList.each {
    injectionOneParts(cassette, it , record, imageTable);
  }
+  //変数取得
+  def postnum1 = record['郵便番号'];
+  def adr1 = record['住所1'];
+  def adr12 = record['住所1の2行目'];
+  def tel1 = record['TEL1'];
+  def fax1 = record['FAX1'];
+  def mobile = record['携帯'];
+  def email = record['Email'];
+  def adrName2 = record['住所2の名称'];
+  def postnum2 = record['郵便番号2'];
+  def adr2 = record['住所2'];
+  def tel2 = record['TEL2'];
+  def fax2 = record['FAX2'];
+  def url = record['URL'];
 
   //<表面住所データ結合>
   def adr1lLabelList = ["結合住所"];
-  def postnum1 = record['郵便番号'];
-  def adr1 = record['住所1'];
   def address1 = '〒' + postnum1 + ' ' + adr1;
   record['結合住所'] = address1;
-
- adr1lLabelList.each{
+  adr1lLabelList.each{
    injectionOneParts(cassette, it , record, imageTable);
  }
 
   //<表面電話番号結合>
   def telfax1LabelList = ['TEL1結合'];
-  def tel1 = record['TEL1'];
-  def fax1 = record['FAX1'];
   def telfax1= 'TEL ' + tel1 + '/FAX ' + fax1 ;
   record['TEL1結合'] = telfax1;
-
   telfax1LabelList.each{
     injectionOneParts(cassette, it , record, imageTable);
   }
 
   //<表面住所データ結合2>
   def adr2LabelList = ["結合住所2"];
-  def postnum2 = record['郵便番号2'];
-  def adr2 = record['住所2'];
   def address2 = '〒' + postnum2 + ' ' + adr2;
   record['結合住所2'] = address2;
-
- adr2LabelList.each{
+  adr2LabelList.each{
    injectionOneParts(cassette, it , record, imageTable);
  }
 
   //<表面電話番号結合2>
   def telfax2LabelList = ['TEL2結合'];
-  def tel2 = record['TEL2'];
-  def fax2 = record['FAX2'];
   def telfax2= 'TEL ' + tel2 + '/FAX ' + fax2 ;
   record['TEL2結合'] = telfax2;
-
   telfax2LabelList.each{
     injectionOneParts(cassette, it , record, imageTable);
   }
 
-  //画像
+  //ISOの有無
   def pImageLabelList = ['ISOロゴ'];
   pImage = 'c64cf821c0a800292cdae106bc9f1b37';
   record['ISOロゴ'] = pImage;
@@ -140,6 +141,16 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     def title1 = getPartsByLabel('肩書き1',1,cassette);
     def title2 = getPartsByLabel('肩書き2',1,cassette);
     def title3 = getPartsByLabel('肩書き3',1,cassette);
+    def pAdr1 = getPartsByLabel('結合住所',1,cassette);
+    def pAdr12 = getPartsByLabel('住所1の2行目',1,cassette);
+    def pTelFax1 = getPartsByLabel('TEL1結合',1,cassette);
+    def pMobile1 = getPartsByLabel('携帯',1,cassette);
+    def pEmail1 = getPartsByLabel('Email',1,cassette);
+    def pAdrName2 = getPartsByLabel('住所2の名称',1,cassette);
+    def pAdr2 = getPartsByLabel('住所2',1,cassette);
+    def pTelFax2 = getPartsByLabel('TEL2結合',1,cassette);
+    def pURL = getPartsByLabel('URL',1,cassette);
+
     //肩書ききが空の場合Y座標を変更
     if(title2.param.text == ''){
       title1.transform.translateY = 18;
@@ -153,20 +164,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     }
 
     //住所行が空の場合の定義
-    def url = record['URL'];
-    def adrName2 = record['住所2の名称'];
-    def email = record['Email'];
-    def mobile = record['携帯'];
-    def adr12 = record['住所1の2行目'];
-    def pAdr1 = getPartsByLabel('結合住所',1,cassette);
-    def pAdr12 = getPartsByLabel('住所1の2行目',1,cassette);
-    def pTelFax1 = getPartsByLabel('TEL1結合',1,cassette);
-    def pMobile1 = getPartsByLabel('携帯',1,cassette);
-    def pEmail1 = getPartsByLabel('Email',1,cassette);
-    def pAdrName2 = getPartsByLabel('住所2の名称',1,cassette);
-    def pAdr2 = getPartsByLabel('住所2',1,cassette);
-    def pTelFax2 = getPartsByLabel('TEL2結合',1,cassette);
-    def pURL = getPartsByLabel('URL',1,cassette);
+
     def linespan = 0;
     def lineheight = 2.5;
     def baseLine = 51;

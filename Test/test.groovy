@@ -22,22 +22,16 @@ def jidori(sei,mei,seispan,smspan,meispan){
 
 //テスト
 //住所欄段落自動繰り下げメソッド
-def addressfall(r,p,b,s,h){
-  p.transform.translateY = b - s;
+def addressfall(r,p,baseLine,linespan,lineheight){
+  p.transform.translateY = baseLine - linespan;
   if(r==''){
     p.setDisplay("none");
+    linespan + 0;
   }
   else
   {
-    s += h;
+    linespan + lineheight;
   }
-}
-//暫定戻り値
-def spanheight(s,h){
-  xline = s + h;
-}
-def displaynone(p){
-  p.setDisplay("none");
 }
 
 //独自の刺し込み処理
@@ -183,76 +177,23 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     }
     else
     {
-      linespan = lineheight;
-    }
-    pTelFax2.transform.translateY = baseLine - linespan;
-    if(telfax2==''){
-      pTelFax2.setDisplay("none");
-    }
-    else
-    {
       linespan += lineheight;
     }
-    pAdr2.transform.translateY = baseLine - linespan;
-    if(adr2==''){
-      pAdr2.setDisplay("none");
-    }
-    else
-    {
-      linespan += lineheight;
-    }
-    pAdrName2.transform.translateY = baseLine - linespan;
-    if(adrName2==''){
-      pAdrName2.setDisplay("none");
-    }
-    else
-    {
-      linespan += lineheight;
-    }
-    pEmail1.transform.translateY = baseLine - linespan;
-    if(email==''){
-      pEmail1.setDisplay("none");
-    }
-    else
-    {
-      linespan += lineheight;
-    }
-    pMobile1.transform.translateY = baseLine - linespan;
-    if(mobile==''){
-      pMobile1.setDisplay("none");
-    }
-    else
-    {
-      linespan += lineheight;
-    }
-    pTelFax1.transform.translateY = baseLine - linespan;
-    if(telfax1==''){
-      pTelFax1.setDisplay("none");
-    }
-    else
-    {
-      linespan += lineheight;
-    }
-    //addressfall(adr12 ,pAdr12 ,baseLine ,linespan ,lineheight)
+    linespan = addressfall(telfax2,pTelFax2,baseLine,linespan,lineheight);
 
-    pAdr12.transform.translateY = baseLine - linespan;
-    if(adr12==''){
-      displaynone(pAdr12);
-    }
-    else
-    {
-      spanheight(linespan,lineheight);
-    }
+    linespan = addressfall(adr2,pAdr2,baseLine,linespan,lineheight);
 
-    pAdr1.transform.translateY = baseLine - xline;
-    if(adr1==''){
-      pAdr1.setDisplay("none");
-    }
-    else
-    {
-      spanheight(linespan,lineheight);
-    }
+    linespan = addressfall(adrName2,pAdrName2,baseLine,linespan,lineheight);
 
+    linespan = addressfall(email,pEmail1,baseLine,linespan,lineheight);
+
+    linespan = addressfall(mobile,pMobile1,baseLine,linespan,lineheight);
+
+    linespan = addressfall(telfax1,pTelFax1,baseLine,linespan,lineheight);
+
+    linespan = addressfall(adr12,pAdr12,baseLine,linespan,lineheight);
+
+    linespan = addressfall(adr1,pAdr1,baseLine,linespan,lineheight);
 
   }else{
     //裏面のパーツ操作スクリプト

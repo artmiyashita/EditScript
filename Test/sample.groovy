@@ -15,13 +15,14 @@ def insertspan(sei,mei,seispan,smspan,meispan){
   sei + smspan + mei;
 }
 
-int spanheight(s,h){
-  x = s + h;
+int spanheight(x,h){
+  x + h;
 }
 
 // メソッドの呼び出し
 def a=100;
 def b=350;
+def x=0;
 def val = add(a, b)
 println val
 
@@ -36,6 +37,10 @@ def Shimei  = insertspan(sei,mei,seispan,smspan,meispan)
 
 println Shimei
 
-spanheight(a,b)
+x=spanheight(x,b)
 
-println x
+println "1回め"+x
+
+x=spanheight(x,15)
+
+println "2回め"+x

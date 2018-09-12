@@ -20,13 +20,17 @@ def jidori(sei,mei,seispan,smspan,meispan){
   sei + smspan + mei;
 }
 //住所欄段落数計算メソッド
-def calclines(r,sumlines){
-  if (r.length()>0){
-    sumlines + 1;
-  }else{
-    sumlines + 0;
+def calclinesLoop(sumlines,addlist){
+  for (int i=0; i<addlist.size(); i++){
+    if (addlist[i].length()>0){
+      sumlines += 1;
+    }else{
+      sumlines += 0;
+    }
   }
+  sumlines;
 }
+
 //住所欄段落自動取詰メソッド
 def addressfall(r,p,baseLine,linespan,lineheight){
   p.transform.translateY = baseLine - linespan;
@@ -61,6 +65,8 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   def tel2 = record['TEL2'];
   def fax2 = record['FAX2'];
   def url = record['URL'];
+  if (url=='なし'){url=''};
+  def addlist = [adr1,adr12,tel1,mobile,email,adrName2,adr2,tel2,url];
 
   //<表面住所データ結合>
   def adr1lLabelList = ["結合住所"];
@@ -95,22 +101,15 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   }
 
   //住所欄の行数計算
-  def debug = ['デバッグ'];
   def sumlines = 0;
-
-  sumlines = calclines(adr1,sumlines);
-  sumlines = calclines(adr12,sumlines);
-  sumlines = calclines(tel1,sumlines);
-  sumlines = calclines(mobile,sumlines);
-  sumlines = calclines(email,sumlines);
-  sumlines = calclines(adrName2,sumlines);
-  sumlines = calclines(adr2,sumlines);
-  sumlines = calclines(url,sumlines);
-
+  sumlines = calclinesLoop(sumlines,addlist);
+/*
+  def debug = ['デバッグ'];
   record['デバッグ'] = "test:" + sumlines;
   debug.each{
     injectionOneParts(cassette, it , record, imageTable);
   }
+*/
 
   //ISOの有無
   def pImageLabelList = ['ISOロゴ'];
@@ -194,14 +193,8 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     def lineheight = 2.5;
     def baseLine = 51;
 
-    pURL.transform.translateY = baseLine;
-    if(url=='なし'){
-      pURL.setDisplay("none");
-    }
-    else
-    {
-      linespan += lineheight;
-    }
+    linespan = addressfall(url,pURL,baseLine,linespan,lineheight);
+
     linespan = addressfall(telfax2,pTelFax2,baseLine,linespan,lineheight);
 
     linespan = addressfall(adr2,pAdr2,baseLine,linespan,lineheight);

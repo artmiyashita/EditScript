@@ -19,8 +19,15 @@ def jidori(sei,mei,seispan,smspan,meispan){
   }
   sei + smspan + mei;
 }
-
-//住所欄段落自動繰り下げメソッド
+//住所欄段落数計算メソッド
+def calclines(r,sumlines){
+  if (r.length()>0){
+    sumlines + 1;
+  }else{
+    sumlines + 0;
+  }
+}
+//住所欄段落自動取詰メソッド
 def addressfall(r,p,baseLine,linespan,lineheight){
   p.transform.translateY = baseLine - linespan;
   if(r==''){
@@ -84,6 +91,24 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   def telfax2= 'TEL ' + tel2 + '/FAX ' + fax2 ;
   record['TEL2結合'] = telfax2;
   telfax2LabelList.each{
+    injectionOneParts(cassette, it , record, imageTable);
+  }
+
+  //住所欄の行数計算
+  def debug = ['デバッグ'];
+  def sumlines = 0;
+
+  sumlines = calclines(adr1,sumlines);
+  sumlines = calclines(adr12,sumlines);
+  sumlines = calclines(tel1,sumlines);
+  sumlines = calclines(mobile,sumlines);
+  sumlines = calclines(email,sumlines);
+  sumlines = calclines(adrName2,sumlines);
+  sumlines = calclines(adr2,sumlines);
+  sumlines = calclines(url,sumlines);
+
+  record['デバッグ'] = "test:" + sumlines;
+  debug.each{
     injectionOneParts(cassette, it , record, imageTable);
   }
 

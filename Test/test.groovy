@@ -20,9 +20,9 @@ def jidori(sei,mei,seispan,smspan,meispan){
   sei + smspan + mei;
 }
 //住所欄段落数計算メソッド
-def calclinesLoop(sumlines,addlist){
-  for (int i=0; i<addlist.size(); i++){
-    if (addlist[i].length()>0){
+def calclines(sumlines,addressList){
+  for (int i=0; i<addressList.size(); i++){
+    if (addressList[i].length()>0){
       sumlines += 1;
     }else{
       sumlines += 0;
@@ -32,6 +32,19 @@ def calclinesLoop(sumlines,addlist){
 }
 
 //住所欄段落自動取詰メソッド
+def addressloop(addressList,pAddressList,baseLine,linespan,lineheight){
+  i = addressList.size() - 1;
+  for(i; i>-1; i--){
+    pAddressList[i].transform.translateY = baseLine - linespan;
+    if(addressList[i]==''){
+      pAddressList[i].setDisplay("none");
+      linespan += 0;
+    }else{
+      linespan += lineheight;
+    }
+  }
+}
+
 def addressfall(r,p,baseLine,linespan,lineheight){
   p.transform.translateY = baseLine - linespan;
   if(r==''){
@@ -66,7 +79,17 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   def fax2 = record['FAX2'];
   def url = record['URL'];
   if (url=='なし'){url=''};
-  def addlist = [adr1,adr12,tel1,mobile,email,adrName2,adr2,tel2,url];
+  def addressList = [adr1,adr12,tel1,mobile,email,adrName2,adr2,tel2,url];
+
+  /*
+    //デバッグ出力
+    def debug = ['デバッグ'];
+    record['デバッグ'] = "test:" + mess;
+    debug.each{
+      injectionOneParts(cassette, it , record, imageTable);
+    }
+  */
+
 
   //<表面住所データ結合>
   def adr1lLabelList = ["結合住所"];
@@ -102,14 +125,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
 
   //住所欄の行数計算
   def sumlines = 0;
-  sumlines = calclinesLoop(sumlines,addlist);
-/*
-  def debug = ['デバッグ'];
-  record['デバッグ'] = "test:" + sumlines;
-  debug.each{
-    injectionOneParts(cassette, it , record, imageTable);
-  }
-*/
+  sumlines = calclines(sumlines,addressList);
 
   //ISOの有無
   def pImageLabelList = ['ISOロゴ'];
@@ -171,9 +187,10 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     def pMobile1 = getPartsByLabel('携帯',1,cassette);
     def pEmail1 = getPartsByLabel('Email',1,cassette);
     def pAdrName2 = getPartsByLabel('住所2の名称',1,cassette);
-    def pAdr2 = getPartsByLabel('住所2',1,cassette);
+    def pAdr2 = getPartsByLabel('結合住所2',1,cassette);
     def pTelFax2 = getPartsByLabel('TEL2結合',1,cassette);
     def pURL = getPartsByLabel('URL',1,cassette);
+    def pAddressList = [pAdr1,pAdr12,pTelFax1,pMobile1,pEmail1,pAdrName2,pAdr2,pTelFax2,pURL];
 
     //肩書ききが空の場合Y座標を変更
     if(title2.param.text == ''){
@@ -187,29 +204,12 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       title1.transform.translateY = 21;
     }
 
-    //住所行が空の場合の定義
-
+    //住所行が空の場合段落を取詰する
     def linespan = 0;
     def lineheight = 2.5;
     def baseLine = 51;
 
-    linespan = addressfall(url,pURL,baseLine,linespan,lineheight);
-
-    linespan = addressfall(telfax2,pTelFax2,baseLine,linespan,lineheight);
-
-    linespan = addressfall(adr2,pAdr2,baseLine,linespan,lineheight);
-
-    linespan = addressfall(adrName2,pAdrName2,baseLine,linespan,lineheight);
-
-    linespan = addressfall(email,pEmail1,baseLine,linespan,lineheight);
-
-    linespan = addressfall(mobile,pMobile1,baseLine,linespan,lineheight);
-
-    linespan = addressfall(telfax1,pTelFax1,baseLine,linespan,lineheight);
-
-    linespan = addressfall(adr12,pAdr12,baseLine,linespan,lineheight);
-
-    linespan = addressfall(adr1,pAdr1,baseLine,linespan,lineheight);
+    addressloop(addressList,pAddressList,baseLine,linespan,lineheight);
 
   }else{
     //裏面のパーツ操作スクリプト

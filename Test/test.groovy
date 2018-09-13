@@ -8,7 +8,6 @@ if(!env.multiLayout) {
 
 // <メソッドの定義>
 // 字取りメソッド
-
 def jidoriBuilder(jidori,sei,mei,pSei,pMei,smspan,positionX){
   j = jidori.size() - 1;
   for(i=0; i<jidori.size(); i++){
@@ -29,6 +28,7 @@ def jidoriBuilder(jidori,sei,mei,pSei,pMei,smspan,positionX){
 }
 
 //住所欄段落数計算メソッド
+def sumlines = 0;
 def calclines(sumlines,recordList){
   for (int i=0; i<recordList.size(); i++){
     if (recordList[i].length()>0){
@@ -57,12 +57,6 @@ def paragraphBuilder(recordList,partsList,positionY,linespan,lineheight){
     }
   }
 }
-
-
-
-
-
-
 
 //独自の刺し込み処理
 def myInjectionOne(cassette, record, labelList, imageTable) {
@@ -102,7 +96,6 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     }
   */
 
-
   //<表面住所データ結合>
   def adr1lLabelList = ["結合住所"];
   def address1 = '〒' + postnum1 + ' ' + adr1;
@@ -135,10 +128,6 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     injectionOneParts(cassette, it , record, imageTable);
   }
 
-  //住所欄の行数計算
-  def sumlines = 0;
-  sumlines = calclines(sumlines,addressList);
-
   //ISOの有無
   def pImageLabelList = ['ISOロゴ'];
   pImage = 'c64cf821c0a800292cdae106bc9f1b37';
@@ -169,8 +158,14 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     def pURL = getPartsByLabel('URL',1,cassette);
     def pAddressList = [pAdr1,pAdr12,pTelFax1,pMobile1,pEmail1,pAdrName2,pAdr2,pTelFax2,pURL];
 
+    //住所欄の行数計算
+    sumlines = 0;
+    sumlines = calclines(sumlines,addressList);
+
     //氏名のY位置
     positionY = 34;
+    if(sumlines > 5){positionY = 32;}
+    if(sumlines > 7){positionY = 29;}
     pSei.transform.translateY = positionY;
     pMei.transform.translateY = positionY;
 
@@ -191,15 +186,15 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     def titleList = [title1,title2,title3];
     def pTitleList = [pTitle1,pTitle2,pTitle3];
     linespan = 0;
-    lineheight = 3;
-    positionY = 18;
-
+    lineheight = 2.5;
+    positionY = pSei.boundBox.y - 2;
+    if(sumlines > 7){pSei.boundBox.y - 1.5;}
     paragraphBuilder(titleList,pTitleList,positionY,linespan,lineheight);
 
     //住所行が空の場合段落を取詰する
     linespan = 0;
     lineheight = 2.5;
-    positionY = 51;
+    positionY = 51.5;
 
     paragraphBuilder(addressList,pAddressList,positionY,linespan,lineheight);
 

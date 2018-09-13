@@ -19,6 +19,7 @@ def jidori(sei,mei,seispan,smspan,meispan){
   }
   sei + smspan + mei;
 }
+
 //住所欄段落数計算メソッド
 def calclines(sumlines,addressList){
   for (int i=0; i<addressList.size(); i++){
@@ -31,29 +32,20 @@ def calclines(sumlines,addressList){
   sumlines;
 }
 
-//住所欄段落自動取詰メソッド
-def addressloop(addressList,pAddressList,baseLine,linespan,lineheight){
-  i = addressList.size() - 1;
+//段落自動取詰(下基準)メソッド
+def linespan = 0;
+def lineheight = 0;
+def baseLine = 0;
+def paragraphBuilder(recordList,partsList,baseLine,linespan,lineheight){
+  i = recordList.size() - 1;
   for(i; i>-1; i--){
-    pAddressList[i].transform.translateY = baseLine - linespan;
-    if(addressList[i]==''){
-      pAddressList[i].setDisplay("none");
+    partsList[i].transform.translateY = baseLine - linespan;
+    if(recordList[i]==''){
+      partsList[i].setDisplay("none");
       linespan += 0;
     }else{
       linespan += lineheight;
     }
-  }
-}
-
-def addressfall(r,p,baseLine,linespan,lineheight){
-  p.transform.translateY = baseLine - linespan;
-  if(r==''){
-    p.setDisplay("none");
-    linespan + 0;
-  }
-  else
-  {
-    linespan + lineheight;
   }
 }
 
@@ -192,7 +184,10 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     def pURL = getPartsByLabel('URL',1,cassette);
     def pAddressList = [pAdr1,pAdr12,pTelFax1,pMobile1,pEmail1,pAdrName2,pAdr2,pTelFax2,pURL];
 
-    //肩書ききが空の場合Y座標を変更
+    //肩書ききが空の場合段落を取る詰めする
+    linespan = 0;
+    lineheight = 2.5;
+    baseLine = 51;
     if(title2.param.text == ''){
       title1.transform.translateY = 18;
     }
@@ -205,11 +200,11 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     }
 
     //住所行が空の場合段落を取詰する
-    def linespan = 0;
-    def lineheight = 2.5;
-    def baseLine = 51;
+    linespan = 0;
+    lineheight = 2.5;
+    baseLine = 51;
 
-    addressloop(addressList,pAddressList,baseLine,linespan,lineheight);
+    paragraphBuilder(addressList,pAddressList,baseLine,linespan,lineheight);
 
   }else{
     //裏面のパーツ操作スクリプト

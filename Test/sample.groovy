@@ -18,29 +18,10 @@ def insertspan(sei,mei,seispan,smspan,meispan){
 int spanheight(x,h){
   x + h;
 }
+def list0 = [1,2,3];
+def list1 = [5,7,11];
+def list =[list0,list1]
 
 // メソッドの呼び出し
-def a=100;
-def b=350;
-def x=0;
-def val = add(a, b)
-println val
 
-StringBuilder sei = new StringBuilder();
-StringBuilder mei = new StringBuilder();
-sei.append('田井中');
-mei.append('一太郎');
-
-def seispan = '_', smspan = '＿', meispan = '_';
-
-def Shimei  = insertspan(sei,mei,seispan,smspan,meispan)
-
-println Shimei
-
-x=spanheight(x,b)
-
-println "1回め"+x
-
-x=spanheight(x,15)
-
-println "2回め"+x
+println list[1][1];

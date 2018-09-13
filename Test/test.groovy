@@ -21,9 +21,9 @@ def jidori(sei,mei,seispan,smspan,meispan){
 }
 
 //住所欄段落数計算メソッド
-def calclines(sumlines,addressList){
-  for (int i=0; i<addressList.size(); i++){
-    if (addressList[i].length()>0){
+def calclines(sumlines,recordList){
+  for (int i=0; i<recordList.size(); i++){
+    if (recordList[i].length()>0){
       sumlines += 1;
     }else{
       sumlines += 0;
@@ -35,11 +35,11 @@ def calclines(sumlines,addressList){
 //段落自動取詰(下基準)メソッド
 def linespan = 0;
 def lineheight = 0;
-def baseLine = 0;
-def paragraphBuilder(recordList,partsList,baseLine,linespan,lineheight){
+def baseline = 0;
+def paragraphBuilder(recordList,partsList,baseline,linespan,lineheight){
   i = recordList.size() - 1;
   for(i; i>-1; i--){
-    partsList[i].transform.translateY = baseLine - linespan;
+    partsList[i].transform.translateY = baseline - linespan;
     if(recordList[i]==''){
       partsList[i].setDisplay("none");
       linespan += 0;
@@ -57,6 +57,9 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
    injectionOneParts(cassette, it , record, imageTable);
  }
   //変数取得
+  def title1 =record['肩書き1'];
+  def title2 =record['肩書き2'];
+  def title3 =record['肩書き3'];
   def postnum1 = record['郵便番号'];
   def adr1 = record['住所1'];
   def adr12 = record['住所1の2行目'];
@@ -170,9 +173,9 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   if(omote != null){
     //表面のパーツ操作スクリプト
     //関連パーツ取得
-    def title1 = getPartsByLabel('肩書き1',1,cassette);
-    def title2 = getPartsByLabel('肩書き2',1,cassette);
-    def title3 = getPartsByLabel('肩書き3',1,cassette);
+    def pTitle1 = getPartsByLabel('肩書き1',1,cassette);
+    def pTitle2 = getPartsByLabel('肩書き2',1,cassette);
+    def pTitle3 = getPartsByLabel('肩書き3',1,cassette);
     def pAdr1 = getPartsByLabel('結合住所',1,cassette);
     def pAdr12 = getPartsByLabel('住所1の2行目',1,cassette);
     def pTelFax1 = getPartsByLabel('TEL1結合',1,cassette);
@@ -185,26 +188,20 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     def pAddressList = [pAdr1,pAdr12,pTelFax1,pMobile1,pEmail1,pAdrName2,pAdr2,pTelFax2,pURL];
 
     //肩書ききが空の場合段落を取る詰めする
+    def titleList = [title1,title2,title3];
+    def pTitleList = [pTitle1,pTitle2,pTitle3];
     linespan = 0;
-    lineheight = 2.5;
-    baseLine = 51;
-    if(title2.param.text == ''){
-      title1.transform.translateY = 18;
-    }
-    if(title3.param.text == ''){
-      title2.transform.translateY = 21;
-      title1.transform.translateY = 18;
-    }
-    if(title2.param.text == '' && title3.param.text == ''){
-      title1.transform.translateY = 21;
-    }
+    lineheight = 3;
+    baseline = 18;
+
+    paragraphBuilder(titleList,pTitleList,baseline,linespan,lineheight);
 
     //住所行が空の場合段落を取詰する
     linespan = 0;
     lineheight = 2.5;
-    baseLine = 51;
+    baseline = 51;
 
-    paragraphBuilder(addressList,pAddressList,baseLine,linespan,lineheight);
+    paragraphBuilder(addressList,pAddressList,baseline,linespan,lineheight);
 
   }else{
     //裏面のパーツ操作スクリプト

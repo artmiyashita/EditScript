@@ -8,17 +8,26 @@ if(!env.multiLayout) {
 
 // <メソッドの定義>
 // 字取りメソッド
-/*
-def jidori(sei,mei,seispan,smspan,meispan){
-  for (int i = 1; i < sei.length(); i+=2){
-    sei.insert(i,seispan);
+
+def jidoriBuilder(jidori,sei,mei,pSei,pMei,smspan,positionX){
+  j = jidori.size() - 1;
+  for(i=0; i<jidori.size(); i++){
+    if(sei.length() == jidori[i][0] && mei.length() == jidori[i][1]){
+      smspan *= jidori[i][2];
+      //姓名にカーニング追加
+      pSei.param.levelRatio = jidori[i][3];
+      pMei.param.levelRatio = jidori[i][4];
+      break;
+    }else{
+      smspan *= jidori[j][2];
+      pSei.param.levelRatio = jidori[j][3];
+      pMei.param.levelRatio = jidori[j][4];
+    }
   }
-  for (int i = 1; i < mei.length(); i+=2){
-    mei.insert(i,meispan);
-  }
-  sei + smspan + mei;
+  pSei.transform.translateX = positionX;
+  pMei.transform.translateX = positionX + smspan + pSei.boundBox.width;
 }
-*/
+
 //住所欄段落数計算メソッド
 def calclines(sumlines,recordList){
   for (int i=0; i<recordList.size(); i++){
@@ -166,34 +175,17 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     pMei.transform.translateY = positionY;
 
     //字取り
+    //デフォルト設定
+    positionX = 28;
+    def smspan = 5;//全角スペース1個分
     //JidoriX[姓文字数、名文字数、姓名間全角スペース比、姓カーニング、名カーニング]
     def jidori = [
       [1,1,1.5,120,120],
       [2,2,1,100,100],
       [3,3,1,50,50],
-      [0,0,0.5,100,100]
+      [0,0,0.5,50,50]
       ];
-    positionX = 28;
-    def smspan = 5;//全角スペース1個分
-    if(sei.length() == jidori[0][0] && mei.length() == jidori[0][1]){
-      smspan *= jidori[0][2];
-      //姓名にカーニング追加
-      pSei.param.levelRatio = jidori[0][3];
-      pMei.param.levelRatio = jidori[0][4];
-    }
-    else if(sei.length() == jidori[1][0] && mei.length() == jidori[1][1]){
-      smspan *= jidori[1][2];
-      pSei.param.levelRatio = jidori[1][3];
-      pMei.param.levelRatio = jidori[1][4];
-    }
-    else{
-      smspan *= jidori[3][2];
-      pSei.param.levelRatio = jidori[3][3];
-      pMei.param.levelRatio = jidori[3][4];
-    }
-    pSei.transform.translateX = positionX;
-    pMei.transform.translateX = positionX + smspan + pSei.boundBox.width;
-
+    jidoriBuilder(jidori,sei,mei,pSei,pMei,smspan,positionX);
 
     //肩書ききが空の場合段落を取る詰めする
     def titleList = [title1,title2,title3];

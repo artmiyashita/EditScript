@@ -20,8 +20,13 @@ int spanheight(x,h){
 }
 def list0 = [1,2,3];
 def list1 = [5,7,11];
+def list2 = [13,17,23];
 def list =[list0,list1]
 
 // メソッドの呼び出し
+
+while(){
+  
+}
 
 println list[1][1];

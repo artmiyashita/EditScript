@@ -12,19 +12,19 @@ def jidoriBuilder(jidori,sei,mei,pSei,pMei,smspan,positionX){
   j = jidori.size() - 1;
   for(i=0; i<jidori.size(); i++){
     if(sei.length() == jidori[i][0] && mei.length() == jidori[i][1]){
-      smspan *= jidori[i][2];
+      smspan = smspan * jidori[i][2];
       //姓名にカーニング追加
-      pSei.param.levelRatio = jidori[i][3];
-      pMei.param.levelRatio = jidori[i][4];
+      pSei.param.letterSpacing = jidori[i][3];
+      pMei.param.letterSpacing = jidori[i][4];
       break;
     }else{
-      smspan *= jidori[j][2];
-      pSei.param.levelRatio = jidori[j][3];
-      pMei.param.levelRatio = jidori[j][4];
+      smspan = smspan * jidori[j][2];
+      pSei.param.letterSpacing = jidori[j][3];
+      pMei.param.letterSpacing = jidori[j][4];
     }
   }
   pSei.transform.translateX = positionX;
-  pMei.transform.translateX = positionX + smspan + pSei.boundBox.width;
+  pMei.transform.translateX = positionX + pSei.boundBox.width + smspan;
 }
 
 //住所欄段落数計算メソッド
@@ -87,14 +87,14 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   if (url=='なし'){url=''};
   def addressList = [adr1,adr12,tel1,mobile,email,adrName2,adr2,tel2,url];
 
-  /*
+
     //デバッグ出力
     def debug = ['デバッグ'];
-    record['デバッグ'] = "test:" + mess;
+    record['デバッグ'] = "test:";
     debug.each{
       injectionOneParts(cassette, it , record, imageTable);
     }
-  */
+
 
   //<表面住所データ結合>
   def adr1lLabelList = ["結合住所"];
@@ -171,14 +171,20 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
 
     //字取り
     //デフォルト設定
-    positionX = 28;
-    def smspan = 5;//全角スペース1個分
-    //JidoriX[姓文字数、名文字数、姓名間全角スペース比、姓カーニング、名カーニング]
+    positionX = 38;
+    def smspan = 5;//全角スペース1個分(mm)
+    //JidoriX[姓文字数、名文字数、姓名間全角スペース比、姓スペース(pt)、名スペース(pt)]
     def jidori = [
-      [1,1,1.5,120,120],
-      [2,2,1,100,100],
-      [3,3,1,50,50],
-      [0,0,0.5,50,50]
+      [1,1,2,0,0],
+      [1,2,2,0,0],
+      [1,3,2,7,7],
+      [2,1,2,7,7],
+      [2,2,1,7,7],
+      [2,3,1,7,7],
+      [3,1,2,7,7],
+      [3,2,1,7,7],
+      [3,3,1,3.5,3.5],
+      [0,0,0.5,0,0]
       ];
     jidoriBuilder(jidori,sei,mei,pSei,pMei,smspan,positionX);
 

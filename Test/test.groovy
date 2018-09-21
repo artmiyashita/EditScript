@@ -12,8 +12,9 @@ def jidoriBuilder(jidori,sei,mei,pSei,pMei,span,positionX){
   j = jidori.size() - 1;
   for(i=0; i<jidori.size(); i++){
     if(sei.length() == jidori[i][0] && mei.length() == jidori[i][1]){
+      //姓名間のスペースの倍率変更
       smspan = span * jidori[i][2];
-      //姓名にカーニング追加
+      //姓名にスペース追加
       pSei.param.letterSpacing = jidori[i][3];
       pMei.param.letterSpacing = jidori[i][4];
       break;
@@ -162,7 +163,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     sumlines = 0;
     sumlines = calclines(sumlines,addressList);
 
-    //氏名のY位置
+    //氏名のY位置変更
     positionY = 34;
     if(sumlines > 5){positionY = 32;}
     if(sumlines > 7){positionY = 29;}
@@ -173,7 +174,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     //デフォルト設定
     positionX = 28;
     def span = 5;//全角スペース1個分(mm)
-    //JidoriX[姓文字数、名文字数、姓名間全角スペース比、姓スペース(pt)、名スペース(pt)]
+    //Jidori＝[姓文字数、名文字数、姓名間全角スペース比、姓スペース(pt)、名スペース(pt)]
     def jidori = [
       [1,1,2,0,0],
       [1,2,1.5,7,7],
@@ -188,8 +189,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       ];
     jidoriBuilder(jidori,sei,mei,pSei,pMei,span,positionX);
 
-
-    //肩書ききが空の場合段落を取る詰めする
+    //肩書きが空の場合段落を取る詰めする
     def titleList = [title1,title2,title3];
     def pTitleList = [pTitle1,pTitle2,pTitle3];
     linespan = 0;
@@ -202,7 +202,6 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     linespan = 0;
     lineheight = 2.5;
     positionY = 51.5;
-
     paragraphBuilder(addressList,pAddressList,positionY,linespan,lineheight);
 
   }else{

@@ -188,19 +188,19 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       ];
 //    jidoriBuilder(jidori,sei,mei,pSei,pMei,span,positionX);
 
-if(sei.length() == 1 && mei.length() == 1){
-  smspan = span * 2;
+if(sei.length() == jidori[0][0] && mei.length() == jidori[0][1]){
+  smspan = span * jidori[0][2];
   //姓名にカーニング追加
-  pSei.param.letterSpacing = 0;
-  pMei.param.letterSpacing = 0;
-}else if(sei.length() == 2 && mei.length() == 2){
-  smspan = span * 1;
-  pSei.param.letterSpacing = 7;
-  pMei.param.letterSpacing = 7;
-}else if(sei.length() == 3 && mei.length() == 3){
-  smspan = span * 0.5;
-  pSei.param.letterSpacing = 3.5;
-  pMei.param.letterSpacing = 3.5;
+  pSei.param.letterSpacing = jidori[0][3];
+  pMei.param.letterSpacing = jidori[0][4];
+}else if(sei.length() == jidori[4][0]  && mei.length() == jidori[4][1] ){
+  smspan = span * jidori[4][2];
+  pSei.param.letterSpacing = jidori[4][3];
+  pMei.param.letterSpacing = jidori[4][4];
+}else if(sei.length() == jidori[8][0]  && mei.length() == jidori[8][1] ){
+  smspan = span * jidori[8][2];
+  pSei.param.letterSpacing = jidori[8][3];
+  pMei.param.letterSpacing = jidori[8][4];
 }else {
 smspan = span * 0.5;
 pSei.param.letterSpacing = 0;

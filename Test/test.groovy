@@ -66,6 +66,12 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
  labelList.each {
    injectionOneParts(cassette, it , record, imageTable);
  }
+
+ //追加ラベル差し込み処理
+ additionalLabelList.each {
+       injectionOneParts(cassette, it , record, imageTable);
+ }
+
   //変数取得
   def title1 =record['肩書き1'];
   def title2 =record['肩書き2'];

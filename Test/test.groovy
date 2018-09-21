@@ -176,38 +176,17 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     //JidoriX[姓文字数、名文字数、姓名間全角スペース比、姓スペース(pt)、名スペース(pt)]
     def jidori = [
       [1,1,2,0,0],
-      [1,2,2,0,0],
-      [1,3,2,7,7],
-      [2,1,2,7,7],
+      [1,2,1.5,7,7],
+      [1,3,1.5,7,7],
+      [2,1,1.5,7,7],
       [2,2,1,7,7],
       [2,3,1,7,7],
-      [3,1,2,7,7],
+      [3,1,1.5,7,7],
       [3,2,1,7,7],
       [3,3,1,3.5,3.5],
       [0,0,0.5,0,0]
       ];
-//    jidoriBuilder(jidori,sei,mei,pSei,pMei,span,positionX);
-
-if(sei.length() == jidori[0][0] && mei.length() == jidori[0][1]){
-  smspan = span * jidori[0][2];
-  //姓名にカーニング追加
-  pSei.param.letterSpacing = jidori[0][3];
-  pMei.param.letterSpacing = jidori[0][4];
-}else if(sei.length() == jidori[4][0]  && mei.length() == jidori[4][1] ){
-  smspan = span * jidori[4][2];
-  pSei.param.letterSpacing = jidori[4][3];
-  pMei.param.letterSpacing = jidori[4][4];
-}else if(sei.length() == jidori[8][0]  && mei.length() == jidori[8][1] ){
-  smspan = span * jidori[8][2];
-  pSei.param.letterSpacing = jidori[8][3];
-  pMei.param.letterSpacing = jidori[8][4];
-}else {
-smspan = span * 0.5;
-pSei.param.letterSpacing = 0;
-pMei.param.letterSpacing = 0;
-}
-pSei.transform.translateX = positionX;
-pMei.transform.translateX = positionX + pSei.boundBox.width + smspan;
+    jidoriBuilder(jidori,sei,mei,pSei,pMei,span,positionX);
 
 
     //肩書ききが空の場合段落を取る詰めする

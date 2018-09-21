@@ -8,17 +8,17 @@ if(!env.multiLayout) {
 
 // <メソッドの定義>
 // 字取りメソッド
-def jidoriBuilder(jidori,sei,mei,pSei,pMei,smspan,positionX){
+def jidoriBuilder(jidori,sei,mei,pSei,pMei,span,positionX){
   j = jidori.size() - 1;
   for(i=0; i<jidori.size(); i++){
     if(sei.length() == jidori[i][0] && mei.length() == jidori[i][1]){
-      smspan = smspan * jidori[i][2];
+      smspan = span * jidori[i][2];
       //姓名にカーニング追加
       pSei.param.letterSpacing = jidori[i][3];
       pMei.param.letterSpacing = jidori[i][4];
       break;
     }else{
-      smspan = smspan * jidori[j][2];
+      smspan = span * jidori[j][2];
       pSei.param.letterSpacing = jidori[j][3];
       pMei.param.letterSpacing = jidori[j][4];
     }
@@ -87,14 +87,14 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   if (url=='なし'){url=''};
   def addressList = [adr1,adr12,tel1,mobile,email,adrName2,adr2,tel2,url];
 
-
-    //デバッグ出力
+/*
+   //デバッグ出力
     def debug = ['デバッグ'];
     record['デバッグ'] = "test:";
     debug.each{
       injectionOneParts(cassette, it , record, imageTable);
     }
-
+*/
 
   //<表面住所データ結合>
   def adr1lLabelList = ["結合住所"];
@@ -171,8 +171,8 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
 
     //字取り
     //デフォルト設定
-    positionX = 38;
-    def smspan = 5;//全角スペース1個分(mm)
+    positionX = 28;
+    def span = 5;//全角スペース1個分(mm)
     //JidoriX[姓文字数、名文字数、姓名間全角スペース比、姓スペース(pt)、名スペース(pt)]
     def jidori = [
       [1,1,2,0,0],
@@ -186,7 +186,29 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       [3,3,1,3.5,3.5],
       [0,0,0.5,0,0]
       ];
-    jidoriBuilder(jidori,sei,mei,pSei,pMei,smspan,positionX);
+//    jidoriBuilder(jidori,sei,mei,pSei,pMei,span,positionX);
+
+if(sei.length() == 1 && mei.length() == 1){
+  smspan = span * 2;
+  //姓名にカーニング追加
+  pSei.param.letterSpacing = 0;
+  pMei.param.letterSpacing = 0;
+}else if(sei.length() == 2 && mei.length() == 2){
+  smspan = span * 1;
+  pSei.param.letterSpacing = 7;
+  pMei.param.letterSpacing = 7;
+}else if(sei.length() == 3 && mei.length() == 3){
+  smspan = span * 0.5;
+  pSei.param.letterSpacing = 3.5;
+  pMei.param.letterSpacing = 3.5;
+}else {
+smspan = span * 0.5;
+pSei.param.letterSpacing = 0;
+pMei.param.letterSpacing = 0;
+}
+pSei.transform.translateX = positionX;
+pMei.transform.translateX = positionX + pSei.boundBox.width + smspan;
+
 
     //肩書ききが空の場合段落を取る詰めする
     def titleList = [title1,title2,title3];

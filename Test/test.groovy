@@ -66,12 +66,6 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
  labelList.each {
    injectionOneParts(cassette, it , record, imageTable);
  }
-
- //追加ラベル差し込み処理
- additionalLabelList.each {
-       injectionOneParts(cassette, it , record, imageTable);
- }
-
   //変数取得
   def title1 =record['肩書き1'];
   def title2 =record['肩書き2'];
@@ -92,6 +86,10 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   def fax2 = record['FAX2'];
   def url = record['URL'];
   if (url=='なし'){url=''};
+  def iso = record['ISO'];
+  def fsc = record['FSC'];
+  def dmr = record['DMR'];
+  def mra = record['MRA'];
   def addressList = [adr1,adr12,tel1,mobile,email,adrName2,adr2,tel2,url];
 
 /*
@@ -142,6 +140,13 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   pImageLabelList.each{
     injectionOneParts(cassette, it , record, imageTable);
   }
+  //FSCの有無
+  pImageLabelList = ['FSCロゴ'];
+  pImage = '0f435ed5c0a80029241c8e8340fbd987';
+  record['ISOロゴ'] = pImage;
+  pImageLabelList.each{
+    injectionOneParts(cassette, it , record, imageTable);
+  }
 
   //表面の判定
   def omote = getPartsByLabel('肩書き1', 1, cassette) ;
@@ -164,6 +169,10 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     def pTelFax2 = getPartsByLabel('TEL2結合',1,cassette);
     def pURL = getPartsByLabel('URL',1,cassette);
     def pAddressList = [pAdr1,pAdr12,pTelFax1,pMobile1,pEmail1,pAdrName2,pAdr2,pTelFax2,pURL];
+    def pIso = getPartsByLabel('ISOロゴ',1,cassette);
+    def pFsc = getPartsByLabel('FSCロゴ',1,cassette);
+    def pDmr = getPartsByLabel('DMRロゴ',1,cassette);
+    def pMra = getPartsByLabel('MRAロゴ',1,cassette);
 
     //住所欄の行数計算
     sumlines = 0;
@@ -209,6 +218,23 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     lineheight = 2.5;
     positionY = 51.5;
     paragraphBuilder(addressList,pAddressList,positionY,linespan,lineheight);
+
+    //ISOの表示
+    if (iso == 'なし'){
+      pIso.setDisplay("none");
+    }
+    //FSCの表示
+    if (fsc == 'なし'){
+      pFsc.setDisplay("none");
+    }
+    //DMRの表示
+    if (dmr == 'なし'){
+      pDmr.setDisplay("none");
+    }
+    //MRAの表示
+    if (mra == 'なし'){
+      pMra.setDisplay("none");
+    }
 
   }else{
     //裏面のパーツ操作スクリプト

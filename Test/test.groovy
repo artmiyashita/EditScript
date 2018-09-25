@@ -132,22 +132,6 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   telfax2LabelList.each{
     injectionOneParts(cassette, it , record, imageTable);
   }
-
-  //ISOの有無
-  def pImageLabelList = ['ISOロゴ'];
-  pImage = 'c64cf821c0a800292cdae106bc9f1b37';
-  record['ISOロゴ'] = pImage;
-  pImageLabelList.each{
-    injectionOneParts(cassette, it , record, imageTable);
-  }
-  //FSCの有無
-  pImageLabelList = ['FSCロゴ'];
-  pImage = '0f435ed5c0a80029241c8e8340fbd987';
-  record['ISOロゴ'] = pImage;
-  pImageLabelList.each{
-    injectionOneParts(cassette, it , record, imageTable);
-  }
-
   //表面の判定
   def omote = getPartsByLabel('肩書き1', 1, cassette) ;
   //表面の処理ここから
@@ -219,20 +203,27 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     positionY = 51.5;
     paragraphBuilder(addressList,pAddressList,positionY,linespan,lineheight);
 
-    //ISOの表示
-    if (iso == 'なし'){
-      pIso.setDisplay("none");
-    }
     //FSCの表示
     if (fsc == 'なし'){
       pFsc.setDisplay("none");
     }
+    //ISOの表示
+    if (iso == 'なし'){
+      pIso.setDisplay("none");
+      pFsc.transform.translateY += 11;
+    }
     //DMRの表示
     if (dmr == 'なし'){
       pDmr.setDisplay("none");
+      pFsc.transform.translateY += 8;
+      pIso.transform.translateY += 8;
     }
     //MRAの表示
-    if (mra == 'なし'){
+    if (mra == 'あり'){
+      pFsc.setDisplay("none");
+      pIso.setDisplay("none");
+      pDmr.setDisplay("none");
+    }else{
       pMra.setDisplay("none");
     }
 

@@ -72,6 +72,8 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   def title3 =record['肩書き3'];
   def sei = record['姓'];
   def mei = record['名'];
+  def seiruby = record['姓ルビ'];
+  def meiruby = record['名ルビ'];
   def postnum1 = record['郵便番号'];
   def adr1 = record['住所1'];
   def adr12 = record['住所1の2行目'];
@@ -143,6 +145,8 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     def pTitle3 = getPartsByLabel('肩書き3',1,cassette);
     def pSei = getPartsByLabel('姓',1,cassette);
     def pMei = getPartsByLabel('名',1,cassette);
+    def pSeiRuby = getPartsByLabel('姓ルビ',1,cassette);
+    def pMeiRuby = getPartsByLabel('名ルビ',1,cassette);
     def pAdr1 = getPartsByLabel('結合住所',1,cassette);
     def pAdr12 = getPartsByLabel('住所1の2行目',1,cassette);
     def pTelFax1 = getPartsByLabel('TEL1結合',1,cassette);
@@ -187,7 +191,21 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       [0,0,0.5,0,0]
       ];
     jidoriBuilder(jidori,sei,mei,pSei,pMei,span,positionX);
-
+    //ルビ配置(センター)
+    if(sei){
+      def seirubyX = pSei.transform.translateX + pSei.boundBox.width / 2;
+      pSeiRuby.transform.translateX = seirubyX;
+      pSeiRuby.param.maxWidth = pSei.boundBox.width;
+      def seirubyY = pSei.transform.translateY - pSei.boundBox.height - 0.5;
+      pSeiRuby.transform.translateY = seirubyY;
+    }
+    if(mei){
+      def meirubyX = pMei.transform.translateX + pMei.boundBox.width / 2;
+      pMeiRuby.transform.translateX = meirubyX;
+      pMeiRuby.param.maxWidth = pMei.boundBox.width;
+      def meirubyY = pMei.transform.translateY - pMei.boundBox.height - 0.5;
+      pMeiRuby.transform.translateY = meirubyY;
+    }
     //肩書きが空の場合段落を取る詰めする
     def titleList = [title1,title2,title3];
     def pTitleList = [pTitle1,pTitle2,pTitle3];

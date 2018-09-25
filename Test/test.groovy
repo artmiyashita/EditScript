@@ -191,21 +191,39 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       [0,0,0.5,0,0]
       ];
     jidoriBuilder(jidori,sei,mei,pSei,pMei,span,positionX);
+    /*
     //ルビ配置(センター)
-    if(sei){
+    if(seiruby1){
       def seirubyX = pSei.transform.translateX + pSei.boundBox.width / 2;
       pSeiRuby.transform.translateX = seirubyX;
       pSeiRuby.param.maxWidth = pSei.boundBox.width;
       def seirubyY = pSei.transform.translateY - pSei.boundBox.height - 0.5;
       pSeiRuby.transform.translateY = seirubyY;
     }
-    if(mei){
+    if(meiruby){
       def meirubyX = pMei.transform.translateX + pMei.boundBox.width / 2;
       pMeiRuby.transform.translateX = meirubyX;
       pMeiRuby.param.maxWidth = pMei.boundBox.width;
       def meirubyY = pMei.transform.translateY - pMei.boundBox.height - 0.5;
       pMeiRuby.transform.translateY = meirubyY;
     }
+    */
+    //ルビ配置(モノルビ)
+    if(seiruby){
+      def seirubyX = pSei.transform.translateX + pSei.boundBox.width / 2;
+      pSeiRuby.transform.translateX = seirubyX;
+      pSeiRuby.param.maxWidth = pSei.boundBox.width;
+      def seirubyY = pSei.transform.translateY - pSei.boundBox.height - 0.5;
+      pSeiRuby.transform.translateY = seirubyY;
+    }
+    if(meiruby){
+      def meirubyX = pMei.transform.translateX + pMei.boundBox.width / 2;
+      pMeiRuby.transform.translateX = meirubyX;
+      pMeiRuby.param.maxWidth = pMei.boundBox.width;
+      def meirubyY = pMei.transform.translateY - pMei.boundBox.height - 0.5;
+      pMeiRuby.transform.translateY = meirubyY;
+    }
+
     //肩書きが空の場合段落を取る詰めする
     def titleList = [title1,title2,title3];
     def pTitleList = [pTitle1,pTitle2,pTitle3];

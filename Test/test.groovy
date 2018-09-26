@@ -88,10 +88,10 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   def fax2 = record['FAX2'];
   def url = record['URL'];
   if (url=='なし'){url=''};
-  def iso = record['ISO'];
-  def fsc = record['FSC'];
-  def dmr = record['DMR'];
-  def mra = record['MRA'];
+  def fsc = record['FSCロゴ'];
+  def iso = record['ISOロゴ'];
+  def dmr = record['DMRロゴ'];
+  def mra = record['MRAロゴ'];
   def addressList = [adr1,adr12,tel1,mobile,email,adrName2,adr2,tel2,url];
 
 /*
@@ -157,10 +157,10 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     def pTelFax2 = getPartsByLabel('TEL2結合',1,cassette);
     def pURL = getPartsByLabel('URL',1,cassette);
     def pAddressList = [pAdr1,pAdr12,pTelFax1,pMobile1,pEmail1,pAdrName2,pAdr2,pTelFax2,pURL];
-    def pIso = getPartsByLabel('ISOロゴ',1,cassette);
-    def pFsc = getPartsByLabel('FSCロゴ',1,cassette);
-    def pDmr = getPartsByLabel('DMRロゴ',1,cassette);
-    def pMra = getPartsByLabel('MRAロゴ',1,cassette);
+    def pFsc = getPartsByLabel('FSCロゴ画像',1,cassette);
+    def pIso = getPartsByLabel('ISOロゴ画像',1,cassette);
+    def pDmr = getPartsByLabel('DMRロゴ画像',1,cassette);
+    def pMra = getPartsByLabel('MRAロゴ画像',1,cassette);
 
     //住所欄の行数計算
     sumlines = 0;

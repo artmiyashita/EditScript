@@ -27,12 +27,12 @@ def jidoriBuilder(jidori,sei,mei,pSei,pMei,span,positionX){
   pSei.transform.translateX = positionX;
   pMei.transform.translateX = positionX + pSei.boundBox.width + smspan;
 }
-//半角英数補正:全角英数字記号を半角に訂正
+//半角英数校正:全角英数字記号を半角に訂正
 def fullwidthCorrector(alphanumericChar){
   def string = alphanumericChar.replaceAll(/[\uff01-\uff5f]/){new String((char)(((int)it)-65248))};
   string.replaceAll( /[^\d]/ ,"-");
 }
-//電話番号補正:電話番号をxxx(xxxx)xxxx型に訂正
+//電話番号校正:電話番号をxxx(xxxx)xxxx型に訂正
 def telnumBuilder(number){
   def wordList = [];
   def searchWord = "-";
@@ -115,15 +115,15 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   def mra = record['MRAロゴ'];
   def addressList = [adr1,adr12,tel1,mobile,email,adrName2,adr2,tel2,url];
 
-/*
-   //デバッグ出力
-    def debug = ['デバッグ'];
-    record['デバッグ'] = "test:";
-    debug.each{
-      injectionOneParts(cassette, it , record, imageTable);
-    }
-*/
-  //
+  //郵便番号校正
+  postnum1 = fullwidthCorrector(postnum1);
+  postnum2 = fullwidthCorrector(postnum2);
+  //電話番号校正：全角は半角に,-は（）に置換
+  tel1 = telnumBuilder(fullwidthCorrector(tel1));
+  fax1 = telnumBuilder(fullwidthCorrector(fax1));
+  tel2 = telnumBuilder(fullwidthCorrector(tel2));
+  fax2 = telnumBuilder(fullwidthCorrector(fax2));
+
   //表面住所データ結合
   def adr1lLabelList = ["結合住所"];
   def address1 = '〒' + postnum1 + ' ' + adr1;
@@ -131,11 +131,6 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   adr1lLabelList.each{
    injectionOneParts(cassette, it , record, imageTable);
  }
-  //電話番号補正：全角は半角に,-は（）に置換
-  tel1 = telnumBuilder(fullwidthCorrector(tel1));
-  fax1 = telnumBuilder(fullwidthCorrector(fax1));
-  tel2 = telnumBuilder(fullwidthCorrector(tel2));
-  fax2 = telnumBuilder(fullwidthCorrector(fax2));
 
   //表面電話番号結合
   def telfax1LabelList = ['TEL1結合'];
@@ -160,15 +155,6 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   telfax2LabelList.each{
     injectionOneParts(cassette, it , record, imageTable);
   }
-/*
-  //裏面電話番号結合2
-  def telfax1EngLabelList = ['TEL1FAX1英字結合'];
-  def telfax2= 'TEL ' + tel1 + '/FAX ' + fax1 ;
-  record['TEL1FAX1英字結合'] = telfax2;
-  telfax1EngLabelList.each{
-    injectionOneParts(cassette, it , record, imageTable);
-  }
-*/
 
   //表面の判定
   def omote = getPartsByLabel('肩書き1', 1, cassette) ;

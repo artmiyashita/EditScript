@@ -92,7 +92,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   def iso = record['ISOロゴ'];
   def dmr = record['DMRロゴ'];
   def mra = record['MRAロゴ'];
-    def addressList = [adr1,adr12,tel1,mobile,email,adrName2,adr2,tel2,url];
+  def addressList = [adr1,adr12,tel1,mobile,email,adrName2,adr2,tel2,url];
 
 /*
    //デバッグ出力
@@ -110,12 +110,15 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   adr1lLabelList.each{
    injectionOneParts(cassette, it , record, imageTable);
  }
+
   //電話番号補正：-は（）に、全角は半角に
-  string = tel1;
+  def string = tel1;
+  def wordList = [];
   def searchWord = "-";
-  string = string.replaceAll(/[\uff01-\uff5f]/){new String((char)(((int)it)-65248))}
-  string = string.replaceAll("ー","-")
-  foundIndex = string.indexOf(searchWord);
+  string = string.replaceAll(/[\uff01-\uff5f]/){new String((char)(((int)it)-65248))};
+  string = string.replaceAll( /[^\d]/ ,"-");
+  def foundIndex = string.indexOf(searchWord);
+  wordList.add(string.substring(0,foundIndex));
   if (foundIndex >= 0){
     wordList.add(string.substring(0,foundIndex));
     string = string.substring(foundIndex+1);
@@ -126,6 +129,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     string = wordList[0] + "(" + wordList[1] + ")" + wordList[2];
   }
  tel1 = string;
+
 
   //<表面電話番号結合>
   def telfax1LabelList = ['TEL1結合'];
@@ -150,7 +154,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   telfax2LabelList.each{
     injectionOneParts(cassette, it , record, imageTable);
   }
-
+/*
   //<裏面電話番号結合2>
   def telfax1EngLabelList = ['TEL1FAX1英字結合'];
   def telfax2= 'TEL ' + tel1 + '/FAX ' + fax1 ;
@@ -158,7 +162,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   telfax1EngLabelList.each{
     injectionOneParts(cassette, it , record, imageTable);
   }
-
+*/
 
   //表面の判定
   def omote = getPartsByLabel('肩書き1', 1, cassette) ;

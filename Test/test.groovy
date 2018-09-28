@@ -123,21 +123,22 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       injectionOneParts(cassette, it , record, imageTable);
     }
 */
-  //
-  //表面住所データ結合
+
+  //<表面住所データ結合>
   def adr1lLabelList = ["結合住所"];
   def address1 = '〒' + postnum1 + ' ' + adr1;
   record['結合住所'] = address1;
   adr1lLabelList.each{
    injectionOneParts(cassette, it , record, imageTable);
  }
-  //電話番号補正：全角は半角に,-は（）に置換
-  tel1 = telnumBuilder(fullwidthCorrector(tel1));
-  fax1 = telnumBuilder(fullwidthCorrector(fax1));
-  tel2 = telnumBuilder(fullwidthCorrector(tel2));
-  fax2 = telnumBuilder(fullwidthCorrector(fax2));
 
-  //表面電話番号結合
+ //電話番号補正：全角は半角に,-は（）に置換
+ tel1 = telnumBuilder(fullwidthCorrector(tel1));
+ fax1 = telnumBuilder(fullwidthCorrector(fax1));
+ tel2 = telnumBuilder(fullwidthCorrector(tel2));
+ fax2 = telnumBuilder(fullwidthCorrector(fax2));
+
+  //<表面電話番号結合>
   def telfax1LabelList = ['TEL1結合'];
   def telfax1= 'TEL ' + tel1 + '/FAX ' + fax1 ;
   record['TEL1結合'] = telfax1;
@@ -145,7 +146,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     injectionOneParts(cassette, it , record, imageTable);
   }
 
-  //表面住所データ結合2
+  //<表面住所データ結合2>
   def adr2LabelList = ["結合住所2"];
   def address2 = '〒' + postnum2 + ' ' + adr2;
   record['結合住所2'] = address2;
@@ -153,7 +154,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
    injectionOneParts(cassette, it , record, imageTable);
  }
 
-  //表面電話番号結合2
+  //<表面電話番号結合2>
   def telfax2LabelList = ['TEL2結合'];
   def telfax2= 'TEL ' + tel2 + '/FAX ' + fax2 ;
   record['TEL2結合'] = telfax2;
@@ -161,7 +162,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     injectionOneParts(cassette, it , record, imageTable);
   }
 /*
-  //裏面電話番号結合2
+  //<裏面電話番号結合2>
   def telfax1EngLabelList = ['TEL1FAX1英字結合'];
   def telfax2= 'TEL ' + tel1 + '/FAX ' + fax1 ;
   record['TEL1FAX1英字結合'] = telfax2;
@@ -227,7 +228,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       [0,0,0.5,0,0]
       ];
     jidoriBuilder(jidori,sei,mei,pSei,pMei,span,positionX);
-
+    /*
     //ルビ配置(センター)
     if(seiruby1){
       def seirubyX = pSei.transform.translateX + pSei.boundBox.width / 2;
@@ -243,8 +244,24 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       def meirubyY = pMei.transform.translateY - pMei.boundBox.height - 0.5;
       pMeiRuby.transform.translateY = meirubyY;
     }
+    */
+    //ルビ配置(モノルビ)
+    if(seiruby){
+      def seirubyX = pSei.transform.translateX + pSei.boundBox.width / 2;
+      pSeiRuby.transform.translateX = seirubyX;
+      pSeiRuby.param.maxWidth = pSei.boundBox.width;
+      def seirubyY = pSei.transform.translateY - pSei.boundBox.height - 0.5;
+      pSeiRuby.transform.translateY = seirubyY;
+    }
+    if(meiruby){
+      def meirubyX = pMei.transform.translateX + pMei.boundBox.width / 2;
+      pMeiRuby.transform.translateX = meirubyX;
+      pMeiRuby.param.maxWidth = pMei.boundBox.width;
+      def meirubyY = pMei.transform.translateY - pMei.boundBox.height - 0.5;
+      pMeiRuby.transform.translateY = meirubyY;
+    }
 
-    //肩書きが空の場合段落を詰める
+    //肩書きが空の場合段落を取る詰めする
     def titleList = [title1,title2,title3];
     def pTitleList = [pTitle1,pTitle2,pTitle3];
     linespan = 0;
@@ -253,7 +270,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     if(sumlines > 7){pSei.boundBox.y - 1.5;}
     paragraphBuilder(titleList,pTitleList,positionY,linespan,lineheight);
 
-    //住所行が空の場合段落を詰める
+    //住所行が空の場合段落を取詰する
     linespan = 0;
     lineheight = 2.5;
     positionY = 51.5;

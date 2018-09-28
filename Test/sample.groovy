@@ -45,5 +45,7 @@ if (string ==~ /\d*.\d*.\d*/) {
 } else {
   println "don't match" + string;
 }
-//result = string.replaceAll( /[^\d]/ ,"-");
+string = string.substring(1);
+result = string.replaceAll( /[^\d]/ ,"-");
+
 println result;

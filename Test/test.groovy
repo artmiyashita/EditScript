@@ -83,10 +83,8 @@ def paragraphBuilder(recordList,partsList,positionY,linespan,lineheight){
 //独自の刺し込み処理
 def myInjectionOne(cassette, record, labelList, imageTable) {
 
-  //基本関数
- labelList.each {
-   injectionOneParts(cassette, it , record, imageTable);
- }
+  def additionalLabelList = ['結合住所','TEL1結合','結合住所2','TEL2結合','TEL1FAX1英字結合'];
+
   //変数取得
   def title1 =record['肩書き1'];
   def title2 =record['肩書き2'];
@@ -109,6 +107,11 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   def fax2 = record['FAX2'];
   def url = record['URL'];
   if (url=='なし'){url=''};
+  def title1Eng =record['肩書き1英字'];
+  def title2Eng =record['肩書き2英字'];
+  def title3Eng =record['肩書き3英字'];
+  def adr1Eng = record['住所1英字'];
+  def adr12Eng = record['住所1英字の2行目'];
   def fsc = record['FSCロゴ'];
   def iso = record['ISOロゴ'];
   def dmr = record['DMRロゴ'];
@@ -125,36 +128,34 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   fax2 = telnumBuilder(fullwidthCorrector(fax2));
 
   //表面住所データ結合
-  def adr1lLabelList = ["結合住所"];
   def address1 = '〒' + postnum1 + ' ' + adr1;
   record['結合住所'] = address1;
-  adr1lLabelList.each{
-   injectionOneParts(cassette, it , record, imageTable);
- }
 
   //表面電話番号結合
-  def telfax1LabelList = ['TEL1結合'];
   def telfax1= 'TEL ' + tel1 + '/FAX ' + fax1 ;
   record['TEL1結合'] = telfax1;
-  telfax1LabelList.each{
-    injectionOneParts(cassette, it , record, imageTable);
-  }
 
   //表面住所データ結合2
-  def adr2LabelList = ["結合住所2"];
   def address2 = '〒' + postnum2 + ' ' + adr2;
   record['結合住所2'] = address2;
-  adr2LabelList.each{
+
+  //表面電話番号結合2
+  def telfax2= 'TEL ' + tel2 + '/FAX ' + fax2 ;
+  record['TEL2結合'] = telfax2;
+
+  //裏面電話番号結合
+  def telfax1Eng= 'TEL +81 ' + tel1.substring(1) + '/FAX +81 ' + fax1.substring(1) ;
+  record['TEL1FAX1英字結合'] = telfax1Eng;
+
+  //基本関数
+ labelList.each {
    injectionOneParts(cassette, it , record, imageTable);
  }
 
-  //表面電話番号結合2
-  def telfax2LabelList = ['TEL2結合'];
-  def telfax2= 'TEL ' + tel2 + '/FAX ' + fax2 ;
-  record['TEL2結合'] = telfax2;
-  telfax2LabelList.each{
-    injectionOneParts(cassette, it , record, imageTable);
-  }
+ //追加ラベルへの差し込み
+additionalLabelList.each {
+  injectionOneParts(cassette, it , record, imageTable);
+}
 
   //表面の判定
   def omote = getPartsByLabel('肩書き1', 1, cassette) ;
@@ -246,16 +247,16 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     paragraphBuilder(addressList,pAddressList,positionY,linespan,lineheight);
 
     //FSCの表示
-    if (fsc == 'なし'){
+    if (fsc != 'あり'){
       pFsc.setDisplay("none");
     }
     //ISOの表示
-    if (iso == 'なし'){
+    if (iso != 'あり'){
       pIso.setDisplay("none");
       pFsc.transform.translateY += 11;
     }
     //DMRの表示
-    if (dmr == 'なし'){
+    if (dmr != 'あり'){
       pDmr.setDisplay("none");
       pFsc.transform.translateY += 8;
       pIso.transform.translateY += 8;

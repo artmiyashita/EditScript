@@ -27,7 +27,23 @@ def jidoriBuilder(jidori,sei,mei,pSei,pMei,span,positionX){
   pSei.transform.translateX = positionX;
   pMei.transform.translateX = positionX + pSei.boundBox.width + smspan;
 }
-
+//電話番号補正
+def telnumBuilder(number){
+  def wordList = [];
+  def searchWord = "-";
+  def string = number.replaceAll(/[\uff01-\uff5f]/){new String((char)(((int)it)-65248))};
+  def foundIndex = string.indexOf(searchWord);
+  if (foundIndex >= 0){
+    wordList.add(string.substring(0,foundIndex));
+    string = string.substring(foundIndex+1);
+    foundIndex = string.indexOf(searchWord);
+    wordList.add(string.substring(0,foundIndex));
+    string = string.substring(foundIndex+1);
+    wordList.add(string);
+    string = wordList[0] + "(" + wordList[1] + ")" + wordList[2];
+  }
+  string;
+}
 //住所欄段落数計算メソッド
 def sumlines = 0;
 def calclines(sumlines,recordList){
@@ -112,24 +128,10 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
  }
 
   //電話番号補正：-は（）に、全角は半角に
-  def string = tel1;
-  def wordList = [];
-  def searchWord = "-";
-  string = string.replaceAll(/[\uff01-\uff5f]/){new String((char)(((int)it)-65248))};
-  string = string.replaceAll( /[^\d]/ ,"-");
-  def foundIndex = string.indexOf(searchWord);
-  wordList.add(string.substring(0,foundIndex));
-  if (foundIndex >= 0){
-    wordList.add(string.substring(0,foundIndex));
-    string = string.substring(foundIndex+1);
-    foundIndex = string.indexOf(searchWord);
-    wordList.add(string.substring(0,foundIndex));
-    string = string.substring(foundIndex+1);
-    wordList.add(string);
-    string = wordList[0] + "(" + wordList[1] + ")" + wordList[2];
-  }
- tel1 = string;
-
+  tel1 = telnumBuilder(tel1);
+  fax1 = telnumBuilder(fax1);
+  tel2 = telnumBuilder(tel2);
+  fax2 = telnumBuilder(fax2);
 
   //<表面電話番号結合>
   def telfax1LabelList = ['TEL1結合'];

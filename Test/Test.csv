@@ -1,5 +1,5 @@
 配送先,ID,姓,名,姓ルビ,名ルビ,肩書き1,肩書き2,肩書き3,郵便番号,住所1,住所1の2行目,TEL1,FAX1,Email,携帯,住所2の名称,郵便番号2,住所2,TEL2,FAX2,URL,姓英字,名英字,所属1英字,所属2英字,所属3英字,所属4英字,住所1英字1行目,住所1英字2行目,FSCロゴ,ISOロゴ,DMRロゴ,MRAロゴ
-,auto[########],"label,required","label,required",,,,,,,,,,,,,,,,,,select,,,,,,,,,select,select,select,select
+,"hide,auto[########]","label,required","label,required",,,,,,,,,,,,,,,,,,select,,,,,,,,,select,select,select,select
 select,,,,,,,,,,,,,,,,,,,,,http://www.test-corp.co.jp,,,,,,,,,なし,なし,なし,なし
 select,,,,,,,,,,,,,,,,,,,,,http://www.test-corp.special.co.jp,,,,,,,,,あり,あり,あり,あり
 select,,,,,,,,,,,,,,,,,,,,,http://www.test3-corp.co.jp,,,,,,,,,,,,

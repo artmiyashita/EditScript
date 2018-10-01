@@ -254,26 +254,14 @@ additionalLabelList.each {
     lineheight = 2.8;
     if(sumlines >= 5 && sumlines < 7){
       lineheight = 2.5;
-      pAdr1.param.size = 6.38;
-      pAdr12.param.size = 6.38;
-      pTelFax1.param.size = 6.38;
-      pMobile1.param.size = 6.38;
-      pEmail1.param.size = 6.38;
-      pAdrName2.param.size = 6.38;
-      pAdr2.param.size = 6.38;
-      pTelFax2.param.size = 6.38;
-      pURL.param.size = 6.38;
+      for(i=0;i>8;i++){
+        pAddressList[i].param.size = 6.38;
+      }
     } else if(sumlines >= 7){
       lineheight = 2.3;
-      pAdr1.param.size = 5.67;
-      pAdr12.param.size = 5.67;
-      pTelFax1.param.size = 5.67;
-      pMobile1.param.size = 5.67;
-      pEmail1.param.size = 5.67;
-      pAdrName2.param.size = 5.67;
-      pAdr2.param.size = 5.67;
-      pTelFax2.param.size = 5.67;
-      pURL.param.size = 5.67;
+      for(i=0;i>8;i++){
+        pAddressList[i].param.size = 5.67;
+      }
     }
 
     //住所行が空の場合段落を詰める

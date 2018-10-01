@@ -126,6 +126,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   fax1 = telnumBuilder(fullwidthCorrector(fax1));
   tel2 = telnumBuilder(fullwidthCorrector(tel2));
   fax2 = telnumBuilder(fullwidthCorrector(fax2));
+  mobile = fullwidthCorrector(mobile);
 
   //表面住所データ結合
   def address1 = '〒' + postnum1 + ' ' + adr1;
@@ -184,6 +185,9 @@ additionalLabelList.each {
     def pIso = getPartsByLabel('ISOロゴ画像',1,cassette);
     def pDmr = getPartsByLabel('DMRロゴ画像',1,cassette);
     def pMra = getPartsByLabel('MRAロゴ画像',1,cassette);
+
+    //テスト
+    pMobile1.param.text = mobile;
 
     //住所欄の行数計算
     sumlines = 0;

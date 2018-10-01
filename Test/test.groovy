@@ -30,7 +30,7 @@ def jidoriBuilder(jidori,sei,mei,pSei,pMei,span,positionX){
 //半角英数校正:全角英数字記号を半角に訂正
 def fullwidthCorrector(alphanumericChar){
   def string = alphanumericChar.replaceAll(/[\uff01-\uff5f]/){new String((char)(((int)it)-65248))};
-  string.replaceAll( /[^\d]/ ,"-");
+  //string.replaceAll( /[^\d]/ ,"-");
 }
 //電話番号校正:電話番号をxxx(xxxx)xxxx型に訂正
 def telnumBuilder(number){
@@ -83,7 +83,7 @@ def paragraphBuilder(recordList,partsList,positionY,linespan,lineheight){
 //独自の刺し込み処理
 def myInjectionOne(cassette, record, labelList, imageTable) {
 
-  def additionalLabelList = ['結合住所','TEL1結合','結合住所2','TEL2結合','TEL1FAX1英字結合'];
+  def additionalLabelList = ['結合住所','TEL1結合','結合住所2','TEL2結合','TEL1FAX1英字結合','デバッグ'];
 
   //変数取得
   def title1 =record['肩書き1'];
@@ -118,15 +118,16 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   def mra = record['MRAロゴ'];
   def addressList = [adr1,adr12,tel1,mobile,email,adrName2,adr2,tel2,url];
 
-  //郵便番号校正
+  //全角英数字校正
   postnum1 = fullwidthCorrector(postnum1);
   postnum2 = fullwidthCorrector(postnum2);
+  mobile = fullwidthCorrector(mobile);
+  email = fullwidthCorrector(email);
   //電話番号校正：全角は半角に,-は（）に置換
   tel1 = telnumBuilder(fullwidthCorrector(tel1));
   fax1 = telnumBuilder(fullwidthCorrector(fax1));
   tel2 = telnumBuilder(fullwidthCorrector(tel2));
   fax2 = telnumBuilder(fullwidthCorrector(fax2));
-  mobile = fullwidthCorrector(mobile);
 
   //表面住所データ結合
   def address1 = '〒' + postnum1 + ' ' + adr1;
@@ -186,17 +187,22 @@ additionalLabelList.each {
     def pDmr = getPartsByLabel('DMRロゴ画像',1,cassette);
     def pMra = getPartsByLabel('MRAロゴ画像',1,cassette);
 
-    //テスト
-    pMobile1.param.text = mobile;
+    //非結合項目の差込
+    pMobile1.param.text = '携帯: ' + mobile;
+    pEmail1.param.text = 'Email: ' + email;
 
     //住所欄の行数計算
     sumlines = 0;
     sumlines = calclines(sumlines,addressList);
+    getPartsByLabel('デバッグ',1,cassette).param.text = "住所行数:" + sumlines;
 
     //氏名のY位置変更
     positionY = 34;
-    if(sumlines > 5){positionY = 32;}
-    if(sumlines > 7){positionY = 29;}
+    if(sumlines >= 5 && sumlines < 7){
+      positionY = 32;
+    } else if(sumlines >= 7){
+      positionY = 29;
+    }
     pSei.transform.translateY = positionY;
     pMei.transform.translateY = positionY;
 
@@ -244,9 +250,35 @@ additionalLabelList.each {
     if(sumlines > 7){pSei.boundBox.y - 1.5;}
     paragraphBuilder(titleList,pTitleList,positionY,linespan,lineheight);
 
+    //住所行の文字のサイズ変更
+    lineheight = 2.8;
+    if(sumlines >= 5 && sumlines < 7){
+      lineheight = 2.5;
+      pAdr1.param.size = 6.38;
+      pAdr12.param.size = 6.38;
+      pTelFax1.param.size = 6.38;
+      pMobile1.param.size = 6.38;
+      pEmail1.param.size = 6.38;
+      pAdrName2.param.size = 6.38;
+      pAdr2.param.size = 6.38;
+      pTelFax2.param.size = 6.38;
+      pURL.param.size = 6.38;
+    } else if(sumlines >= 7){
+      lineheight = 2.3;
+      pAdr1.param.size = 5.67;
+      pAdr12.param.size = 5.67;
+      pTelFax1.param.size = 5.67;
+      pMobile1.param.size = 5.67;
+      pEmail1.param.size = 5.67;
+      pAdrName2.param.size = 5.67;
+      pAdr2.param.size = 5.67;
+      pTelFax2.param.size = 5.67;
+      pURL.param.size = 5.67;
+    }
+
     //住所行が空の場合段落を詰める
     linespan = 0;
-    lineheight = 2.5;
+    //lineheight = 住所行の文字のサイズ変更で定義;
     positionY = 51.5;
     paragraphBuilder(addressList,pAddressList,positionY,linespan,lineheight);
 

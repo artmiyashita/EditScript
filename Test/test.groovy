@@ -113,6 +113,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   def title1Eng =record['所属1英字'];
   def title2Eng =record['所属2英字'];
   def title3Eng =record['所属3英字'];
+  def title4Eng =record['所属4英字'];
   def adr1Eng = record['住所1英字1行目'];
   def adr12Eng = record['住所1英字2行目'];
   def fsc = record['FSCロゴ'];
@@ -301,6 +302,7 @@ additionalLabelList.each {
     def pTitle1Eng = getPartsByLabel('所属1英字',1,cassette);
     def pTitle2Eng = getPartsByLabel('所属2英字',1,cassette);
     def pTitle3Eng = getPartsByLabel('所属3英字',1,cassette);
+    def pTitle4Eng = getPartsByLabel('所属4英字',1,cassette);
     def pAdr1Eng = getPartsByLabel('住所1英字1行目',1,cassette);
     def pAdr12Eng = getPartsByLabel('住所1英字2行目',1,cassette);
     def pTelFax1Eng = getPartsByLabel('TEL1FAX1英字結合',1,cassette);
@@ -308,11 +310,20 @@ additionalLabelList.each {
     def pURL = getPartsByLabel('URL',1,cassette);
 
     //肩書きが空の場合段落を詰める
-    def titleEngList = [title1Eng,title2Eng,title3Eng];
-    def pTitleEngList = [pTitle1Eng,pTitle2Eng,pTitle3Eng];
+    def titleEngList = [title1Eng,title2Eng,title3Eng,title4Eng];
+    def pTitleEngList = [pTitle1Eng,pTitle2Eng,pTitle3Eng,pTitle4Eng];
     linespan = 0;
     lineheight = 2.5;
+    sumlines = 0;
+    sumlines = calclines(sumlines,titleEngList);
     positionY = 28;
+    if(sumlines < 2){
+      positionY = 21;
+    } else if(sumlines < 3){
+      positionY = 24;
+    } else if(sumlines < 4){
+      positionY = 26;
+    }
     paragraphBuilder(titleEngList,pTitleEngList,positionY,linespan,lineheight);
 
     //住所行が空の場合段落を詰める

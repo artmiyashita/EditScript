@@ -30,7 +30,10 @@ def jidoriBuilder(jidori,sei,mei,pSei,pMei,span,positionX){
 //半角英数校正:全角英数字記号を半角に訂正
 def fullwidthCorrector(alphanumericChar){
   def string = alphanumericChar.replaceAll(/[\uff01-\uff5f]/){new String((char)(((int)it)-65248))};
-  //string.replaceAll( /[^\d]/ ,"-");
+}
+//
+def replacer(string){
+  string.replaceAll( /[^\d]/ ,"-");
 }
 //電話番号校正:電話番号をxxx(xxxx)xxxx型に訂正
 def telnumBuilder(number){
@@ -83,7 +86,7 @@ def paragraphBuilder(recordList,partsList,positionY,linespan,lineheight){
 //独自の刺し込み処理
 def myInjectionOne(cassette, record, labelList, imageTable) {
 
-  def additionalLabelList = ['結合住所','TEL1結合','結合住所2','TEL2結合','TEL1FAX1英字結合','デバッグ'];
+  def additionalLabelList = ['結合住所','TEL1結合','結合住所2','TEL2結合','TEL1FAX1英字結合'];
 
   //変数取得
   def title1 =record['肩書き1'];
@@ -107,11 +110,11 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   def fax2 = record['FAX2'];
   def url = record['URL'];
   if (url=='なし'){url=''};
-  def title1Eng =record['肩書き1英字'];
-  def title2Eng =record['肩書き2英字'];
-  def title3Eng =record['肩書き3英字'];
-  def adr1Eng = record['住所1英字'];
-  def adr12Eng = record['住所1英字の2行目'];
+  def title1Eng =record['所属1英字'];
+  def title2Eng =record['所属2英字'];
+  def title3Eng =record['所属3英字'];
+  def adr1Eng = record['住所1英字1行目'];
+  def adr12Eng = record['住所1英字2行目'];
   def fsc = record['FSCロゴ'];
   def iso = record['ISOロゴ'];
   def dmr = record['DMRロゴ'];
@@ -121,13 +124,12 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   //全角英数字校正
   postnum1 = fullwidthCorrector(postnum1);
   postnum2 = fullwidthCorrector(postnum2);
-  mobile = fullwidthCorrector(mobile);
   email = fullwidthCorrector(email);
-  //電話番号校正：全角は半角に,-は（）に置換
-  tel1 = telnumBuilder(fullwidthCorrector(tel1));
-  fax1 = telnumBuilder(fullwidthCorrector(fax1));
-  tel2 = telnumBuilder(fullwidthCorrector(tel2));
-  fax2 = telnumBuilder(fullwidthCorrector(fax2));
+  tel1 = telnumBuilder(replacer(fullwidthCorrector(tel1)));
+  fax1 = telnumBuilder(replacer(fullwidthCorrector(fax1)));
+  tel2 = telnumBuilder(replacer(fullwidthCorrector(tel2)));
+  fax2 = telnumBuilder(replacer(fullwidthCorrector(fax2)));
+  mobile = replacer(fullwidthCorrector(mobile));
 
   //表面住所データ結合
   def address1 = '〒' + postnum1 + ' ' + adr1;
@@ -194,7 +196,6 @@ additionalLabelList.each {
     //住所欄の行数計算
     sumlines = 0;
     sumlines = calclines(sumlines,addressList);
-    getPartsByLabel('デバッグ',1,cassette).param.text = "住所行数:" + sumlines;
 
     //氏名のY位置変更
     positionY = 34;
@@ -296,6 +297,32 @@ additionalLabelList.each {
 
   }else{
     //裏面のパーツ操作スクリプト
+    //関連パーツ取得
+    def pTitle1Eng = getPartsByLabel('所属1英字',1,cassette);
+    def pTitle2Eng = getPartsByLabel('所属2英字',1,cassette);
+    def pTitle3Eng = getPartsByLabel('所属3英字',1,cassette);
+    def pAdr1Eng = getPartsByLabel('住所1英字1行目',1,cassette);
+    def pAdr12Eng = getPartsByLabel('住所1英字2行目',1,cassette);
+    def pTelFax1Eng = getPartsByLabel('TEL1FAX1英字結合',1,cassette);
+    def pEmail1 = getPartsByLabel('Email',1,cassette);
+    def pURL = getPartsByLabel('URL',1,cassette);
+
+    //肩書きが空の場合段落を詰める
+    def titleEngList = [title1Eng,title2Eng,title3Eng];
+    def pTitleEngList = [pTitle1Eng,pTitle2Eng,pTitle3Eng];
+    linespan = 0;
+    lineheight = 2.5;
+    positionY = 28;
+    paragraphBuilder(titleEngList,pTitleEngList,positionY,linespan,lineheight);
+
+    //住所行が空の場合段落を詰める
+    def addressEngList = [adr1Eng,adr12Eng,tel1,email,url];
+    def pAddressEngList = [pAdr1Eng,pAdr12Eng,pTelFax1Eng,pEmail1,pURL];
+    linespan = 0;
+    lineheight = 2.5;
+    positionY = 51.5;
+    paragraphBuilder(addressEngList,pAddressEngList,positionY,linespan,lineheight);
+
   }
 
 }

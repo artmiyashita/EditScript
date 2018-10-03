@@ -14,7 +14,9 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   postnum = record['郵便番号'].replace('-','');
   record['郵便バーコード'] = postnum;
 
-  record['氏名'] = record['姓']　+ ' ' +　record['名'];
+  def sei = record['姓'];
+  def mei = record['名'];
+  record['氏名'] = sei + ' ' + mei;
 
   //基本関数
   labelList.each {

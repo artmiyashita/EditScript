@@ -153,14 +153,14 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   record['TEL1FAX1英字結合'] = telfax1Eng;
 
   //基本関数
- labelList.each {
-   injectionOneParts(cassette, it , record, imageTable);
- }
+  labelList.each {
+    injectionOneParts(cassette, it , record, imageTable);
+  }
 
- //追加ラベルへの差し込み
-additionalLabelList.each {
-  injectionOneParts(cassette, it , record, imageTable);
-}
+  //追加ラベルへの差し込み
+  additionalLabelList.each {
+    injectionOneParts(cassette, it , record, imageTable);
+  }
 
   //表面の判定
   def omote = getPartsByLabel('肩書き1', 1, cassette) ;

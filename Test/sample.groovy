@@ -75,3 +75,10 @@ if (foundIndex >= 0){
 }
 def filmdate = wordList[0] + '年' + wordList[1] + '月' + wordList[2] + '日';
 println '撮影日：' + filmdate;
+
+
+def fruit = 'イチゴ$メロンバナナ';
+result = fruit.substring(0, 3);
+println result;
+result = fruit.substring(3);
+println result;

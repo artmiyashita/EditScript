@@ -10,7 +10,7 @@ if(!env.multiLayout) {
 def myInjectionOne(cassette, record, labelList, imageTable) {
 
   //郵便番号整形
-  def additionalLabelList = ['郵便バーコード','氏名','撮影日'];
+  def additionalLabelList = ['郵便バーコード','氏名','撮影日','本文'];
   postnum = record['郵便番号'].replace('-','');
   record['郵便バーコード'] = postnum;
 
@@ -67,12 +67,28 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
 
   }else{
 
-    //おすすめ商品情報整形
+    //本文改行
+    def pContents = getPartsByLabel('本文', 1, cassette);
+    def contents = pContents.param.text;
+    def contentsList = [];
+    def l = 0;
+    while (contents.length() > 40){
+      contentsList[l] = contents.substring(0,40);
+      contents = contents.substring(40);
+      l += 1;
+    }
+    contentsList[l] = contents;
+    for (i=0; i <= l-1; i++){
+      contentsList[i] = contentsList[i] + '\n';
+    }
+    //pContents.param.text =
 
+    //おすすめ商品情報改行
     def recommendInfo = record['おすすめ商品情報'];
     def pRecommendInfo = getPartsByLabel('おすすめ商品情報', 1, cassette);
     def infoList = [];
-    def l = 0;
+    def string = '';
+    l = 0;
     searchWord = '◆';
     foundIndex = 1;
     foundIndex = recommendInfo.indexOf(searchWord);
@@ -88,10 +104,9 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       l += 1;
     }
     infoList[l] = recommendInfo;
-    for (i=0; i <= 2; i++){
-      infoList[i] = infoList[i] + '\n';
+    for (i = 0; i <= l-1; i++){
+      string += infoList[i] + '\n';
     }
-    pRecommendInfo.param.text = infoList[0] + infoList[1] + infoList[2];
-
+    pRecommendInfo.param.text =  string + infoList[l];
   }
 }

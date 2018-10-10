@@ -49,3 +49,29 @@ string = string.substring(1);
 result = string.replaceAll( /[^\d]/ ,"-");
 
 println result;
+
+/*現在字間取得
+import java.text.SimpleDateFormat
+
+def date = new Date()
+println date;
+def format = new SimpleDateFormat('yyyy/MM/dd HH:mm:ss.SSS')
+def formatDate = format.format(date);
+println 'Date型' + formatDate;
+*/
+
+def strdate = '2018/10/9'
+foundIndex = 1;
+wordList = [];
+searchWord = '/';
+foundIndex = strdate.indexOf(searchWord);
+if (foundIndex >= 0){
+  while (foundIndex >= 0){
+    wordList.add(strdate.substring(0,foundIndex));
+    strdate = strdate.substring(foundIndex+1);
+    foundIndex = strdate.indexOf(searchWord);
+  }
+  wordList.add(strdate);
+}
+def filmdate = wordList[0] + '年' + wordList[1] + '月' + wordList[2] + '日';
+println '撮影日：' + filmdate;

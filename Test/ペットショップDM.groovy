@@ -9,14 +9,32 @@ if(!env.multiLayout) {
 //独自の刺し込み処理
 def myInjectionOne(cassette, record, labelList, imageTable) {
 
-  def additionalLabelList = ['郵便バーコード','氏名'];
-
+  //郵便番号整形
+  def additionalLabelList = ['郵便バーコード','氏名','撮影日'];
   postnum = record['郵便番号'].replace('-','');
   record['郵便バーコード'] = postnum;
 
+  //氏名結合
   def sei = record['姓'];
   def mei = record['名'];
   record['氏名'] = sei + ' ' + mei;
+
+  //来店日整形
+  def strdate = record['前回来店日'];
+  def foundIndex = 1;
+  def wordList = [];
+  def searchWord = '/';
+  foundIndex = strdate.indexOf(searchWord);
+  if (foundIndex >= 0){
+    while (foundIndex >= 0){
+      wordList.add(strdate.substring(0,foundIndex));
+      strdate = strdate.substring(foundIndex+1);
+      foundIndex = strdate.indexOf(searchWord);
+    }
+    wordList.add(strdate);
+  }
+  def filmdate = wordList[0] + '年' + wordList[1] + '月' + wordList[2] + '日';
+  record['撮影日'] = '(' + filmdate  + ' ご来店時に撮影)';
 
   //基本関数
   labelList.each {
@@ -34,6 +52,17 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
 
     for (int i=0; i<7; i++){
       getPartsByLabel('郵便番号',i+1,cassette).param.text = postnum.substring(i,i+1);
+    }
+
+    //地図
+    def map = record['地図'];
+    def pMap = getPartsByLabel('地図画像', 1, cassette);
+    if (map =='MAP1'){
+      pMap.param.trackingID = '3e60acdac0a800295231fe5f4ab342c1';
+    }else if(map =='MAP2'){
+      pMap.param.trackingID = '5bb26618c0a800294a22753eaa16a0df';
+    }else if(map =='MAP3'){
+      pMap.param.trackingID = '5bb27d21c0a800294a309bf367bc7c57';
     }
 
   }else{

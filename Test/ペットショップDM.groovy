@@ -67,5 +67,14 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
 
   }else{
 
+    //おすすめ商品情報整形
+    def recommendInfo = record['おすすめ商品情報'];
+    def pRecommendInfo = getPartsByLabel('おすすめ商品情報', 1, cassette);
+    def infoList = [];
+    if (recommendInfo.length() > 21){
+      infoList[0] = recommendInfo.substring(0,21);
+      infoList[1] = recommendInfo.substring(21,42);
+    }
+    pRecommendInfo.param.text = infoList[0] + '\n' + infoList[1];
   }
 }

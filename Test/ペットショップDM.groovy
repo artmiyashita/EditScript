@@ -68,14 +68,27 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   }else{
 
     //おすすめ商品情報整形
+
     def recommendInfo = record['おすすめ商品情報'];
     def pRecommendInfo = getPartsByLabel('おすすめ商品情報', 1, cassette);
     def infoList = [];
-    if (recommendInfo.length() > 21){
-      infoList[0] = recommendInfo.substring(0,21);
-      infoList[1] = recommendInfo.substring(21,42);
+    def l = 0;
+    searchWord = '◆';
+    foundIndex = 1;
+    foundIndex = recommendInfo.indexOf(searchWord);
+    while (foundIndex >= 0){
+      infoList[l] = recommendInfo.substring(0,foundIndex);
+      recommendInfo = recommendInfo.substring(foundIndex+1);
+      foundIndex = recommendInfo.indexOf(searchWord);
+      l += 1;
     }
-    pRecommendInfo.param.text = infoList[0] + '\n' + infoList[1];
-    
+    while (recommendInfo.length() > 20){
+      infoList[l] = recommendInfo.substring(0,20);
+      recommendInfo = recommendInfo.substring(20);
+      l += 1;
+    }
+    infoList[l] = recommendInfo;
+    pRecommendInfo.param.text = infoList[0] + '\n' + infoList[1] + '\n' + infoList[2];
+
   }
 }

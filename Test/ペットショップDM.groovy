@@ -76,5 +76,6 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       infoList[1] = recommendInfo.substring(21,42);
     }
     pRecommendInfo.param.text = infoList[0] + '\n' + infoList[1];
+    
   }
 }

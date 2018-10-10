@@ -10,7 +10,7 @@ if(!env.multiLayout) {
 def myInjectionOne(cassette, record, labelList, imageTable) {
 
   //郵便番号整形
-  def additionalLabelList = ['郵便バーコード','氏名','撮影日','本文'];
+  def additionalLabelList = ['郵便バーコード','氏名','撮影日','本文','おすすめ商品名2価格'];
   postnum = record['郵便番号'].replace('-','');
   record['郵便バーコード'] = postnum;
 
@@ -35,6 +35,11 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   }
   def filmdate = wordList[0] + '年' + wordList[1] + '月' + wordList[2] + '日';
   record['撮影日'] = '(' + filmdate  + ' ご来店時に撮影)';
+
+  //おすすめ商品名2&価格
+  def recommendItem2 = record['おすすめ商品名2'];
+  def recommendItemPrice = record['おすすめ商品価格'];
+  record['おすすめ商品名2価格'] = recommendItem2 + '/' + recommendItemPrice;
 
   //基本関数
   labelList.each {

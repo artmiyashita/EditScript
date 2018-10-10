@@ -88,7 +88,10 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       l += 1;
     }
     infoList[l] = recommendInfo;
-    pRecommendInfo.param.text = infoList[0] + '\n' + infoList[1] + '\n' + infoList[2];
+    for (i=0; i <= 2; i++){
+      infoList[i] = infoList[i] + '\n';
+    }
+    pRecommendInfo.param.text = infoList[0] + infoList[1] + infoList[2];
 
   }
 }

@@ -71,6 +71,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     def pContents = getPartsByLabel('本文', 1, cassette);
     def contents = pContents.param.text;
     def contentsList = [];
+    def string = '';
     def l = 0;
     while (contents.length() > 40){
       contentsList[l] = contents.substring(0,40);
@@ -79,15 +80,15 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     }
     contentsList[l] = contents;
     for (i=0; i <= l-1; i++){
-      contentsList[i] = contentsList[i] + '\n';
+      string += contentsList[i] + '\n';
     }
-    //pContents.param.text =
+    pContents.param.text = string + contentsList[l];
 
     //おすすめ商品情報改行
     def recommendInfo = record['おすすめ商品情報'];
     def pRecommendInfo = getPartsByLabel('おすすめ商品情報', 1, cassette);
     def infoList = [];
-    def string = '';
+    string = '';
     l = 0;
     searchWord = '◆';
     foundIndex = 1;

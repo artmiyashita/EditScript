@@ -257,17 +257,20 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       seiruby = seiruby.substring(foundIndex+1);
       foundIndex = seiruby.indexOf(searchWord);
     }
-    /*
+    seiRubyList.push(seiruby);
+
     //姓ルビ間の距離を算出
     def a = pSei.param.size;
     def b = pSeiRuby.param.size;
     def c = jidori[jidoriId][3];
-    def n = seiRubyList.length;
+    def n = seiRubyList.size();
     def seiRubySpan = [];
-    //seiRubySpan[0] = (a - (b * se));
-    */
+    seiRubySpan[0] = (a - (b * seiRubyList[0].size()))/2;
+    for (i=1; i<n; i++){
+      seiRubySpan[i] = c + (2 * a - (b * (seiRubyList[i-1].size() + seiRubyList[i].size())))/2;
+    }
     //テスト
-    getPartsByLabel('テスト',1,cassette).param.text = seiruby;
+    getPartsByLabel('テスト',1,cassette).param.text = '0:'+seiRubySpan[0]+' 1:'+seiRubySpan[1]+' 2:'+seiRubySpan[2];
 
     //肩書きが空の場合段落を詰める
     def titleList = [title1,title2,title3];

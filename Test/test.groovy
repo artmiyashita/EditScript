@@ -1,4 +1,4 @@
-@import injectionValiable
+meiRubymeiruby@import injectionValiable
 env.injectionOne = {cassette, record, labelList, imageTable ->
  myInjectionOne(cassette, record, labelList, imageTable);
 };
@@ -178,6 +178,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     def pSeiRuby = getPartsByLabel('姓ルビ',1,cassette);
     def pSeiRubyMono = getPartsByLabel('姓ルビ2',1,cassette);
     def pMeiRuby = getPartsByLabel('名ルビ',1,cassette);
+    def pMeiRubyMono = getPartsByLabel('名ルビ2',1,cassette);
     def pAdr1 = getPartsByLabel('結合住所',1,cassette);
     def pAdr12 = getPartsByLabel('住所1の2行目',1,cassette);
     def pTelFax1 = getPartsByLabel('TEL1結合',1,cassette);
@@ -231,14 +232,52 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     jidoriBuilder(jidori,sei,mei,pSei,pMei,span,positionX);
 
 
-/*
-    //ルビ配置(センター)
-    if(seiruby){
-      def seirubyX = pSei.transform.translateX + pSei.boundBox.width / 2;
-      pSeiRuby.transform.translateX = seirubyX;
-      pSeiRuby.param.maxWidth = pSei.boundBox.width;
-      def seirubyY = pSei.transform.translateY - pSei.boundBox.height - 0.5;
-      pSeiRuby.transform.translateY = seirubyY;
+    //ルビの設定
+    pSeiRubyMono.param.size = 5;//ルビの文字サイズ指定(pt)
+    pMeiRubyMono.param.size = 5;//ルビの文字サイズ指定(pt)
+    def rubyFont = 'FOT-ロダン Pro M';//ルビのフォント
+
+    //姓ルビの条件分岐（モノルビorセンタールビ）
+    searchWord = '/';
+    foundIndex = seiruby.indexOf(searchWord);
+
+    if (foundIndex < 0){
+      //ルビ配置(センター)
+      if(seiruby){
+        def seirubyX = pSei.transform.translateX + pSei.boundBox.width / 2;
+        pSeiRuby.transform.translateX = seirubyX;
+        pSeiRuby.param.maxWidth = pSei.boundBox.width;
+        def seirubyY = pSei.transform.translateY - pSei.boundBox.height - 0.5;
+        pSeiRuby.transform.translateY = seirubyY;
+      }
+    } else {
+      //ルビ配置(モノルビ)
+      //姓ルビを区切り文字”/”で分解、配列に追加
+      def seiRubyList = [];
+      while (foundIndex >= 0){
+        seiRubyList.push(seiruby.substring(0, foundIndex));
+        seiruby = seiruby.substring(foundIndex+1);
+        foundIndex = seiruby.indexOf(searchWord);
+      }
+      seiRubyList.push(seiruby);
+      //姓ルビ間の距離を算出
+      def a = pSei.param.size;
+      def b = pSeiRuby.param.size;
+      def c = jidori[jidoriId][3];
+      def n = seiRubyList.size();
+      def seiRubySpan = [];
+      seiRubySpan[0] = (a - (b * seiRubyList[0].size()))/2;
+      for (i=1; i<n; i++){
+        seiRubySpan[i] = c + (2 * a - (b * (seiRubyList[i-1].size() + seiRubyList[i].size())))/2;
+      }
+      //姓ルビテキストの生成と配置
+      def seiRubyText = '';
+      for (i=0; i<n ; i++){
+        seiRubyText += '<font size="' + seiRubySpan[i] + 'pt">　</font>' + seiRubyList[i];
+      }
+      pSeiRubyMono.param.text = '<p><font face="' + rubyFont + '">' + seiRubyText + '</font></p>';
+      pSeiRubyMono.transform.translateX = pSei.transform.translateX;
+      pSeiRubyMono.transform.translateY = pSei.transform.translateY - pSei.boundBox.height + 1;
     }
     if(meiruby){
       def meirubyX = pMei.transform.translateX + pMei.boundBox.width / 2;
@@ -247,43 +286,44 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       def meirubyY = pMei.transform.translateY - pMei.boundBox.height - 0.5;
       pMeiRuby.transform.translateY = meirubyY;
     }
+/*
+    //名ルビの条件分岐（モノルビorセンタールビ）
+    foundIndex = meiruby.indexOf(searchWord);
+    if (foundIndex < 0){
+
+      } else {
+        //ルビ配置(モノルビ)
+        //名ルビを区切り文字”/”で分解、配列に追加
+        def meiRubyList = [];
+        while (foundIndex >= 0){
+          meiRubyList.push(meiruby.substring(0, foundIndex));
+          meiruby = meiruby.substring(foundIndex+1);
+          foundIndex = meiruby.indexOf(searchWord);
+        }
+        meiRubyList.push(meiruby);
+        //名ルビ間の距離を算出
+        def a = pSei.param.size;
+        def b = pMeiRuby.param.size;
+        def c = jidori[jidoriId][3];
+        def n = meiRubyList.size();
+        def meiRubySpan = [];
+        meiRubySpan[0] = (a - (b * meiRubyList[0].size()))/2;
+        for (i=1; i<n; i++){
+          meiRubySpan[i] = c + (2 * a - (b * (meiRubyList[i-1].size() + meiRubyList[i].size())))/2;
+        }
+        //名ルビテキストの生成と配置
+        def meiRubyText = '';
+        for (i=0; i<n ; i++){
+          meiRubyText += '<font size="' + meiRubySpan[i] + 'pt">　</font>' + meiRubyList[i];
+        }
+        pMeiRubyMono.param.text = '<p><font face="' + rubyFont + '">' + meiRubyText + '</font></p>';
+        pMeiRubyMono.transform.translateX = pSei.transform.translateX;
+        pMeiRubyMono.transform.translateY = pSei.transform.translateY - pSei.boundBox.height + 1;
+      }
 */
 
-    //ルビ配置(モノルビ)
-    pSeiRubyMono.param.size = 5;//ルビの文字サイズ指定(pt)
-    //姓ルビを区切り文字”/”で分解、配列に追加
-    def seiRubyList = [];
-    searchWord = '/';
-    foundIndex = seiruby.indexOf(searchWord);
-    while (foundIndex >= 0){
-      seiRubyList.push(seiruby.substring(0, foundIndex));
-      seiruby = seiruby.substring(foundIndex+1);
-      foundIndex = seiruby.indexOf(searchWord);
-    }
-    seiRubyList.push(seiruby);
-
-    //姓ルビ間の距離を算出
-    def a = pSei.param.size;
-    def b = pSeiRuby.param.size;
-    def c = jidori[jidoriId][3];
-    def n = seiRubyList.size();
-    def seiRubySpan = [];
-    seiRubySpan[0] = (a - (b * seiRubyList[0].size()))/2;
-    for (i=1; i<n; i++){
-      seiRubySpan[i] = c + (2 * a - (b * (seiRubyList[i-1].size() + seiRubyList[i].size())))/2;
-    }
-
-    //姓ルビテキストの生成と配置
-    def seiRubyText = '';
-    for (i=0; i<n ; i++){
-      seiRubyText += '<font size="' + seiRubySpan[i] + 'pt">　</font>' + seiRubyList[i];
-    }
-    pSeiRubyMono.param.text = '<p><font face="FOT-ロダン Pro M">' + seiRubyText + '</font></p>';
-    pSeiRubyMono.transform.translateX = pSei.transform.translateX;
-    pSeiRubyMono.transform.translateY = pSei.transform.translateY - pSei.boundBox.height + 1;
-
     //テスト
-    getPartsByLabel('テスト',1,cassette).param.text = seiRubyText;
+    //getPartsByLabel('テスト',1,cassette).param.text = seiRubyText;
 
     //肩書きが空の場合段落を詰める
     def titleList = [title1,title2,title3];

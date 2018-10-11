@@ -12,6 +12,8 @@ def jidoriBuilder(jidori,sei,mei,pSei,pMei,span,positionX){
   j = jidori.size() - 1;
   for(i=0; i<jidori.size(); i++){
     if(sei.length() == jidori[i][0] && mei.length() == jidori[i][1]){
+      //合致パターンの記録
+      jidoriId = i;
       //姓名間のスペースの倍率変更
       smspan = span * jidori[i][2];
       //姓名にスペース追加
@@ -227,6 +229,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       ];
     jidoriBuilder(jidori,sei,mei,pSei,pMei,span,positionX);
 
+    /*
     //ルビ配置(センター)
     if(seiruby){
       def seirubyX = pSei.transform.translateX + pSei.boundBox.width / 2;
@@ -242,6 +245,29 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       def meirubyY = pMei.transform.translateY - pMei.boundBox.height - 0.5;
       pMeiRuby.transform.translateY = meirubyY;
     }
+    */
+
+    //ルビ配置(モノルビ)
+    //姓ルビを区切り文字”/”で分解、配列に追加
+    def seiRubyList = [];
+    searchWord = '/';
+    foundIndex = seiruby.indexOf(searchWord);
+    while (foundIndex >= 0){
+      seiRubyList.push(seiruby.substring(0, foundIndex));
+      seiruby = seiruby.substring(foundIndex+1);
+      foundIndex = seiruby.indexOf(searchWord);
+    }
+    /*
+    //姓ルビ間の距離を算出
+    def a = pSei.param.size;
+    def b = pSeiRuby.param.size;
+    def c = jidori[jidoriId][3];
+    def n = seiRubyList.length;
+    def seiRubySpan = [];
+    //seiRubySpan[0] = (a - (b * se));
+    */
+    //テスト
+    getPartsByLabel('テスト',1,cassette).param.text = seiruby;
 
     //肩書きが空の場合段落を詰める
     def titleList = [title1,title2,title3];

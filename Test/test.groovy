@@ -231,7 +231,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     jidoriBuilder(jidori,sei,mei,pSei,pMei,span,positionX);
 
 
-    /*
+/*
     //ルビ配置(センター)
     if(seiruby){
       def seirubyX = pSei.transform.translateX + pSei.boundBox.width / 2;
@@ -247,7 +247,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       def meirubyY = pMei.transform.translateY - pMei.boundBox.height - 0.5;
       pMeiRuby.transform.translateY = meirubyY;
     }
-    */
+*/
 
     //ルビ配置(モノルビ)
     pSeiRubyMono.param.size = 5;//ルビの文字サイズ指定(pt)
@@ -264,7 +264,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
 
     //姓ルビ間の距離を算出
     def a = pSei.param.size;
-    def b = pSeiRubyMono.param.size;
+    def b = pSeiRuby.param.size;
     def c = jidori[jidoriId][3];
     def n = seiRubyList.size();
     def seiRubySpan = [];
@@ -273,16 +273,15 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       seiRubySpan[i] = c + (2 * a - (b * (seiRubyList[i-1].size() + seiRubyList[i].size())))/2;
     }
 
-    //姓ルビテキストの生成
+    //姓ルビテキストの生成と配置
     def seiRubyText = '';
     for (i=0; i<n ; i++){
-      seiRubyText += '<font size="' + seiRubySpan[i] + 'pt">　</font>';
+      seiRubyText += '<font size="' + seiRubySpan[i] + 'pt">　</font>' + seiRubyList[i];
     }
-    /*
-    pSeiRubyMono.param.text = '<p>' + seiRubyText + '</p>';
+    pSeiRubyMono.param.text = '<p><font face="FOT-ロダン Pro M">' + seiRubyText + '</font></p>';
     pSeiRubyMono.transform.translateX = pSei.transform.translateX;
-    pSeiRubyMono.transform.translateY = pSei.transform.translateY - pMei.boundBox.height - 0.5;
-    */
+    pSeiRubyMono.transform.translateY = pSei.transform.translateY - pSei.boundBox.height + 1;
+
     //テスト
     getPartsByLabel('テスト',1,cassette).param.text = seiRubyText;
 

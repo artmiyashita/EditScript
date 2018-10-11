@@ -58,6 +58,15 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     for (int i=0; i<7; i++){
       getPartsByLabel('郵便番号',i+1,cassette).param.text = postnum.substring(i,i+1);
     }
+    
+    /*
+    //テスト
+    def pTest1 = getPartsByLabel('テスト1', 1, cassette);
+    def pTest2 = getPartsByLabel('テスト2', 1, cassette);
+    pTest2.param.size = 6;
+    pTest1.param.text = pTest2.param.size;
+    pTest2.param.text = '<p><font size="15pt">テスト2</font>です</p>';
+    */
 
     //地図
     def map = record['地図'];

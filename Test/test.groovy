@@ -176,6 +176,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     def pSei = getPartsByLabel('姓',1,cassette);
     def pMei = getPartsByLabel('名',1,cassette);
     def pSeiRuby = getPartsByLabel('姓ルビ',1,cassette);
+    def pSeiRubyMono = getPartsByLabel('姓ルビ2',1,cassette);
     def pMeiRuby = getPartsByLabel('名ルビ',1,cassette);
     def pAdr1 = getPartsByLabel('結合住所',1,cassette);
     def pAdr12 = getPartsByLabel('住所1の2行目',1,cassette);
@@ -229,6 +230,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       ];
     jidoriBuilder(jidori,sei,mei,pSei,pMei,span,positionX);
 
+
     /*
     //ルビ配置(センター)
     if(seiruby){
@@ -248,6 +250,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     */
 
     //ルビ配置(モノルビ)
+    pSeiRubyMono.param.size = 5;//ルビの文字サイズ指定(pt)
     //姓ルビを区切り文字”/”で分解、配列に追加
     def seiRubyList = [];
     searchWord = '/';
@@ -261,7 +264,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
 
     //姓ルビ間の距離を算出
     def a = pSei.param.size;
-    def b = pSeiRuby.param.size;
+    def b = pSeiRubyMono.param.size;
     def c = jidori[jidoriId][3];
     def n = seiRubyList.size();
     def seiRubySpan = [];
@@ -269,8 +272,19 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     for (i=1; i<n; i++){
       seiRubySpan[i] = c + (2 * a - (b * (seiRubyList[i-1].size() + seiRubyList[i].size())))/2;
     }
+
+    //姓ルビテキストの生成
+    def seiRubyText = '';
+    for (i=0; i<n ; i++){
+      seiRubyText += '<font size="' + seiRubySpan[i] + 'pt">　</font>';
+    }
+    /*
+    pSeiRubyMono.param.text = '<p>' + seiRubyText + '</p>';
+    pSeiRubyMono.transform.translateX = pSei.transform.translateX;
+    pSeiRubyMono.transform.translateY = pSei.transform.translateY - pMei.boundBox.height - 0.5;
+    */
     //テスト
-    getPartsByLabel('テスト',1,cassette).param.text = '0:'+seiRubySpan[0]+' 1:'+seiRubySpan[1]+' 2:'+seiRubySpan[2];
+    getPartsByLabel('テスト',1,cassette).param.text = seiRubyText;
 
     //肩書きが空の場合段落を詰める
     def titleList = [title1,title2,title3];

@@ -178,6 +178,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     def pSeiRuby = getPartsByLabel('姓ルビ',1,cassette);
     def pSeiRubyMono = getPartsByLabel('姓ルビ2',1,cassette);
     def pMeiRuby = getPartsByLabel('名ルビ',1,cassette);
+    def pMeiRubyMono = getPartsByLabel('名ルビ2',1,cassette);
     def pAdr1 = getPartsByLabel('結合住所',1,cassette);
     def pAdr12 = getPartsByLabel('住所1の2行目',1,cassette);
     def pTelFax1 = getPartsByLabel('TEL1結合',1,cassette);
@@ -233,6 +234,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
 
     //ルビの設定
     pSeiRubyMono.param.size = 5;//ルビの文字サイズ指定(pt)
+    pMeiRubyMono.param.size = 5;//ルビの文字サイズ指定(pt)
     def rubyFont = 'FOT-ロダン Pro M';//ルビのフォント
 
     //ルビの条件分岐（モノルビorセンタールビ）
@@ -240,7 +242,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     foundIndex = seiruby.indexOf(searchWord);
 
     if (foundIndex < 0){
-      //ルビ配置(センター)
+      //姓ルビ配置(センター)
       if(seiruby){
         def seirubyX = pSei.transform.translateX + pSei.boundBox.width / 2;
         pSeiRuby.transform.translateX = seirubyX;
@@ -249,7 +251,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
         pSeiRuby.transform.translateY = seirubyY;
       }
     } else {
-      //ルビ配置(モノルビ)
+      //姓ルビ配置(モノルビ)
       //姓ルビを区切り文字”/”で分解、配列に追加
       def seiRubyList = [];
       while (foundIndex >= 0){
@@ -278,16 +280,22 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       pSeiRubyMono.transform.translateY = pSei.transform.translateY - pSei.boundBox.height + 1;
     }
 
-    if(meiruby){
-      def meirubyX = pMei.transform.translateX + pMei.boundBox.width / 2;
-      pMeiRuby.transform.translateX = meirubyX;
-      pMeiRuby.param.maxWidth = pMei.boundBox.width;
-      def meirubyY = pMei.transform.translateY - pMei.boundBox.height - 0.5;
-      pMeiRuby.transform.translateY = meirubyY;
+    foundIndex = meiruby.indexOf(searchWord);
+    if (foundIndex < 0){
+      if(meiruby){
+        def meirubyX = pMei.transform.translateX + pMei.boundBox.width / 2;
+        pMeiRuby.transform.translateX = meirubyX;
+        pMeiRuby.param.maxWidth = pMei.boundBox.width;
+        def meirubyY = pMei.transform.translateY - pMei.boundBox.height - 0.5;
+        pMeiRuby.transform.translateY = meirubyY;
+      }
+    } else {
+
+
     }
 
     //テスト
-    //getPartsByLabel('テスト',1,cassette).param.text = seiRubyText;
+    getPartsByLabel('テスト',1,cassette).param.text = pMeiRubyMono.param.text;
 
     //肩書きが空の場合段落を詰める
     def titleList = [title1,title2,title3];

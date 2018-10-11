@@ -282,6 +282,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
 
     foundIndex = meiruby.indexOf(searchWord);
     if (foundIndex < 0){
+      //名ルビ配置(センター)
       if(meiruby){
         def meirubyX = pMei.transform.translateX + pMei.boundBox.width / 2;
         pMeiRuby.transform.translateX = meirubyX;
@@ -290,20 +291,45 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
         pMeiRuby.transform.translateY = meirubyY;
       }
     } else {
-
-
+      //名ルビ配置(モノルビ)
+      //名ルビを区切り文字”/”で分解、配列に追加
+      def meiRubyList = [];
+      while (foundIndex >= 0){
+        meiRubyList.push(meiruby.substring(0, foundIndex));
+        meiruby = meiruby.substring(foundIndex+1);
+        foundIndex = meiruby.indexOf(searchWord);
+      }
+      meiRubyList.push(meiruby);
+      //名ルビ間の距離を算出
+      def a = pMei.param.size;
+      def b = pMeiRuby.param.size;
+      def c = jidori[jidoriId][3];
+      def n = meiRubyList.size();
+      def meiRubySpan = [];
+      meiRubySpan[0] = (a - (b * meiRubyList[0].size()))/2;
+      for (i=1; i<n; i++){
+        meiRubySpan[i] = c + (2 * a - (b * (meiRubyList[i-1].size() + meiRubyList[i].size())))/2;
+      }
+      //姓ルビテキストの生成と配置
+      def meiRubyText = '';
+      for (i=0; i<n ; i++){
+        meiRubyText += '<font size="' + meiRubySpan[i] + 'pt">　</font>' + meiRubyList[i];
+      }
+      pMeiRubyMono.param.text = '<p><font face="' + rubyFont + '">' + meiRubyText + '</font></p>';
+      pMeiRubyMono.transform.translateX = pMei.transform.translateX;
+      pMeiRubyMono.transform.translateY = pMei.transform.translateY - pMei.boundBox.height + 1;
     }
 
     //テスト
-    getPartsByLabel('テスト',1,cassette).param.text = pMeiRubyMono.param.text;
+    //getPartsByLabel('テスト',1,cassette).param.text = pMeiRubyMono.param.text;
 
     //肩書きが空の場合段落を詰める
     def titleList = [title1,title2,title3];
     def pTitleList = [pTitle1,pTitle2,pTitle3];
     linespan = 0;
     lineheight = 2.5;
-    positionY = pSei.boundBox.y - 2;
-    if(sumlines > 7){pSei.boundBox.y - 1.5;}
+    positionY = pMei.boundBox.y - 2;
+    if(sumlines > 7){pMei.boundBox.y - 1.5;}
     paragraphBuilder(titleList,pTitleList,positionY,linespan,lineheight);
 
     //住所行の文字のサイズ変更

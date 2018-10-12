@@ -41,6 +41,9 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   def recommendItemPrice = record['おすすめ商品価格'];
   record['おすすめ商品名2価格'] = recommendItem2 + '/' + recommendItemPrice;
 
+  //カセット操作
+  def csi = getCassetteInfo('56cbc640c0a800290ca89109adb58197',2,0);
+
   //基本関数
   labelList.each {
     injectionOneParts(cassette, it , record, imageTable);
@@ -123,5 +126,10 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       string += infoList[i] + '\n';
     }
     pRecommendInfo.param.text =  string + infoList[l];
+
+    //カセット「情報枠」入れ替え
+    def pInfomation = getPartsByLabel('情報枠', 1, cassette);
+    replaceCassette(pInfomation,'5d856ce6c0a8002935c2d6dc214e569a');
+
   }
 }

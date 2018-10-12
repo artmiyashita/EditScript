@@ -233,7 +233,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
 
 
     //ルビの設定
-    pSeiRubyMono.param.size = 5;//ルビの文字サイズ指定(pt)
+    pSeiRuby.param.size = 5;//ルビの文字サイズ指定(pt)
     pMeiRubyMono.param.size = 5;//ルビの文字サイズ指定(pt)
     def rubyFont = 'FOT-ロダン Pro M';//ルビのフォント
 
@@ -266,6 +266,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       def c = jidori[jidoriId][3];
       def n = seiRubyList.size();
       def seiRubySpan = [];
+      /*
       seiRubySpan[0] = (a - (b * seiRubyList[0].size()))/2;
       for (i=1; i<n; i++){
         seiRubySpan[i] = c + (2 * a - (b * (seiRubyList[i-1].size() + seiRubyList[i].size())))/2;
@@ -275,10 +276,15 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       for (i=0; i<n ; i++){
         seiRubyText += '<font size="' + seiRubySpan[i] + 'pt">　</font>' + seiRubyList[i];
       }
-      pSeiRubyMono.param.text = '<p><font face="' + rubyFont + '">' + seiRubyText + '</font></p>';
-      pSeiRubyMono.transform.translateX = pSei.transform.translateX;
-      pSeiRubyMono.transform.translateY = pSei.transform.translateY - pSei.boundBox.height + 1;
+      pSeiRuby.param.text = '<p><font face="' + rubyFont + '">' + seiRubyText + '</font></p>';
+      pSeiRuby.editReferencePoint('center-center',keepReferencePointPosition = true)
+      pSeiRuby.transform.translateX = pSei.transform.translateX;
+      pSeiRuby.transform.translateY = pSei.transform.translateY - pSei.boundBox.height + 1;
+      */
     }
+
+    //テスト
+    getPartsByLabel('テスト',1,cassette).param.text = pSeiRuby.param.size;
 
     foundIndex = meiruby.indexOf(searchWord);
     if (foundIndex < 0){
@@ -319,9 +325,6 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       pMeiRubyMono.transform.translateX = pMei.transform.translateX;
       pMeiRubyMono.transform.translateY = pMei.transform.translateY - pMei.boundBox.height + 1;
     }
-
-    //テスト
-    //getPartsByLabel('テスト',1,cassette).param.text = pMeiRubyMono.param.text;
 
     //肩書きが空の場合段落を詰める
     def titleList = [title1,title2,title3];

@@ -176,9 +176,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     def pSei = getPartsByLabel('姓',1,cassette);
     def pMei = getPartsByLabel('名',1,cassette);
     def pSeiRuby = getPartsByLabel('姓ルビ',1,cassette);
-    def pSeiRubyMono = getPartsByLabel('姓ルビ2',1,cassette);
     def pMeiRuby = getPartsByLabel('名ルビ',1,cassette);
-    def pMeiRubyMono = getPartsByLabel('名ルビ2',1,cassette);
     def pAdr1 = getPartsByLabel('結合住所',1,cassette);
     def pAdr12 = getPartsByLabel('住所1の2行目',1,cassette);
     def pTelFax1 = getPartsByLabel('TEL1結合',1,cassette);
@@ -233,8 +231,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
 
 
     //ルビの設定
-    pSeiRuby.param.size = 5;//ルビの文字サイズ指定(pt)
-    pMeiRubyMono.param.size = 5;//ルビの文字サイズ指定(pt)
+    def rubySize = 5;//ルビの文字サイズ指定(pt)
     def rubyFont = 'FOT-ロダン Pro M';//ルビのフォント
 
     //ルビの条件分岐（モノルビorセンタールビ）
@@ -247,8 +244,10 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
         def seirubyX = pSei.transform.translateX + pSei.boundBox.width / 2;
         pSeiRuby.transform.translateX = seirubyX;
         pSeiRuby.param.maxWidth = pSei.boundBox.width;
-        def seirubyY = pSei.transform.translateY - pSei.boundBox.height - 0.5;
+        def seirubyY = pSei.transform.translateY - pSei.boundBox.height + 1;
         pSeiRuby.transform.translateY = seirubyY;
+        pSeiRuby.param.size = rubySize;
+        pSeiRuby.param.font = rubyFont;
       }
     } else {
       //姓ルビ配置(モノルビ)
@@ -262,11 +261,10 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       seiRubyList.push(seiruby);
       //姓ルビ間の距離を算出
       def a = pSei.param.size;
-      def b = pSeiRuby.param.size;
+      def b = rubySize;
       def c = jidori[jidoriId][3];
       def n = seiRubyList.size();
       def seiRubySpan = [];
-      /*
       seiRubySpan[0] = (a - (b * seiRubyList[0].size()))/2;
       for (i=1; i<n; i++){
         seiRubySpan[i] = c + (2 * a - (b * (seiRubyList[i-1].size() + seiRubyList[i].size())))/2;
@@ -276,15 +274,15 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       for (i=0; i<n ; i++){
         seiRubyText += '<font size="' + seiRubySpan[i] + 'pt">　</font>' + seiRubyList[i];
       }
-      pSeiRuby.param.text = '<p><font face="' + rubyFont + '">' + seiRubyText + '</font></p>';
-      pSeiRuby.editReferencePoint('center-center',keepReferencePointPosition = true)
-      pSeiRuby.transform.translateX = pSei.transform.translateX;
-      pSeiRuby.transform.translateY = pSei.transform.translateY - pSei.boundBox.height + 1;
-      */
+      pSeiRuby.param.size = rubySize;
+      pSeiRuby.param.font = rubyFont;
+      pSeiRuby.param.text = '<p>' + seiRubyText + '</p>';
+      //pSeiRuby.editReferencePoint('bottom-left',keepReferencePointPosition = false)
+      def seirubyX = pSei.transform.translateX;
+      pSeiRuby.transform.translateX = seirubyX;
+      def seirubyY = pSei.transform.translateY - pSei.boundBox.height + 1;
+      pSeiRuby.transform.translateY = seirubyY;
     }
-
-    //テスト
-    getPartsByLabel('テスト',1,cassette).param.text = pSeiRuby.param.size;
 
     foundIndex = meiruby.indexOf(searchWord);
     if (foundIndex < 0){
@@ -296,7 +294,16 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
         def meirubyY = pMei.transform.translateY - pMei.boundBox.height - 0.5;
         pMeiRuby.transform.translateY = meirubyY;
       }
-    } else {
+      if(meiruby){
+        def meirubyX = pMei.transform.translateX + pMei.boundBox.width / 2;
+        pMeiRuby.transform.translateX = meirubyX;
+        pMeiRuby.param.maxWidth = pMei.boundBox.width;
+        def meirubyY = pMei.transform.translateY - pMei.boundBox.height + 1;
+        pMeiRuby.transform.translateY = meirubyY;
+        pMeiRuby.param.size = rubySize;
+        pMeiRuby.param.font = rubyFont;
+      }
+  } else {
       //名ルビ配置(モノルビ)
       //名ルビを区切り文字”/”で分解、配列に追加
       def meiRubyList = [];
@@ -308,7 +315,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       meiRubyList.push(meiruby);
       //名ルビ間の距離を算出
       def a = pMei.param.size;
-      def b = pMeiRuby.param.size;
+      def b = rubySize;
       def c = jidori[jidoriId][3];
       def n = meiRubyList.size();
       def meiRubySpan = [];
@@ -316,15 +323,22 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       for (i=1; i<n; i++){
         meiRubySpan[i] = c + (2 * a - (b * (meiRubyList[i-1].size() + meiRubyList[i].size())))/2;
       }
-      //姓ルビテキストの生成と配置
+      //名ルビテキストの生成と配置
       def meiRubyText = '';
       for (i=0; i<n ; i++){
         meiRubyText += '<font size="' + meiRubySpan[i] + 'pt">　</font>' + meiRubyList[i];
       }
-      pMeiRubyMono.param.text = '<p><font face="' + rubyFont + '">' + meiRubyText + '</font></p>';
-      pMeiRubyMono.transform.translateX = pMei.transform.translateX;
-      pMeiRubyMono.transform.translateY = pMei.transform.translateY - pMei.boundBox.height + 1;
+      pMeiRuby.param.size = rubySize;
+      pMeiRuby.param.font = rubyFont;
+      pMeiRuby.param.text = '<p>' + meiRubyText + '</p>';
+      def meirubyX = pMei.transform.translateX;
+      pMeiRuby.transform.translateX = meirubyX;
+      def meirubyY = pMei.transform.translateY - pMei.boundBox.height + 1;
+      pMeiRuby.transform.translateY = meirubyY;
     }
+
+    //テスト
+    getPartsByLabel('テスト',1,cassette).param.text = pSei.param.font;
 
     //肩書きが空の場合段落を詰める
     def titleList = [title1,title2,title3];

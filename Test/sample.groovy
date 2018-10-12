@@ -76,9 +76,13 @@ if (foundIndex >= 0){
 def filmdate = wordList[0] + '年' + wordList[1] + '月' + wordList[2] + '日';
 println '撮影日：' + filmdate;
 
+def pSei = 14.15;//ルビの文字サイズ指定(pt)
+def pSeiRuby = 5;//ルビの文字サイズ指定(pt)
+def seiRubyList = ['タ','イ','ナカ'];
+def a = pSei;
+def b = pSeiRuby;
+def n = seiRubyList.size();
+def seiRubySpan = [];
+seiRubySpan[0] = (a - (b * seiRubyList[0].size()))/2;
 
-def fruit = 'イチゴ$メロンバナナ';
-result = fruit.substring(0, 3);
-println result;
-result = fruit.substring(3);
-println result;
+println seiRubySpan[0]

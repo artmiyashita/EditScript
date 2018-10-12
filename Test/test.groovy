@@ -244,7 +244,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
         def seirubyX = pSei.transform.translateX + pSei.boundBox.width / 2;
         pSeiRuby.transform.translateX = seirubyX;
         pSeiRuby.param.maxWidth = pSei.boundBox.width;
-        def seirubyY = pSei.transform.translateY - pSei.boundBox.height + 1;
+        def seirubyY = pSei.transform.translateY - pSei.boundBox.height + 0.5;
         pSeiRuby.transform.translateY = seirubyY;
         pSeiRuby.param.size = rubySize;
         pSeiRuby.param.font = rubyFont;
@@ -277,11 +277,9 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       pSeiRuby.param.size = rubySize;
       pSeiRuby.param.font = rubyFont;
       pSeiRuby.param.text = '<p>' + seiRubyText + '</p>';
-      //pSeiRuby.editReferencePoint('bottom-left',keepReferencePointPosition = false)
-      def seirubyX = pSei.transform.translateX;
-      pSeiRuby.transform.translateX = seirubyX;
-      def seirubyY = pSei.transform.translateY - pSei.boundBox.height + 1;
-      pSeiRuby.transform.translateY = seirubyY;
+      pSeiRuby.editReferencePoint('left',keepReferencePointPosition = false);
+      pSeiRuby.transform.translateX = pSei.transform.translateX;
+      pSeiRuby.transform.translateY = pSei.transform.translateY - pSei.boundBox.height + 0.5;
     }
 
     foundIndex = meiruby.indexOf(searchWord);
@@ -291,14 +289,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
         def meirubyX = pMei.transform.translateX + pMei.boundBox.width / 2;
         pMeiRuby.transform.translateX = meirubyX;
         pMeiRuby.param.maxWidth = pMei.boundBox.width;
-        def meirubyY = pMei.transform.translateY - pMei.boundBox.height - 0.5;
-        pMeiRuby.transform.translateY = meirubyY;
-      }
-      if(meiruby){
-        def meirubyX = pMei.transform.translateX + pMei.boundBox.width / 2;
-        pMeiRuby.transform.translateX = meirubyX;
-        pMeiRuby.param.maxWidth = pMei.boundBox.width;
-        def meirubyY = pMei.transform.translateY - pMei.boundBox.height + 1;
+        def meirubyY = pMei.transform.translateY - pMei.boundBox.height + 0.5;
         pMeiRuby.transform.translateY = meirubyY;
         pMeiRuby.param.size = rubySize;
         pMeiRuby.param.font = rubyFont;
@@ -331,14 +322,13 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       pMeiRuby.param.size = rubySize;
       pMeiRuby.param.font = rubyFont;
       pMeiRuby.param.text = '<p>' + meiRubyText + '</p>';
-      def meirubyX = pMei.transform.translateX;
-      pMeiRuby.transform.translateX = meirubyX;
-      def meirubyY = pMei.transform.translateY - pMei.boundBox.height + 1;
-      pMeiRuby.transform.translateY = meirubyY;
+      pMeiRuby.transform.translateX = pMei.transform.translateX;
+      pMeiRuby.transform.translateY = pMei.transform.translateY - pMei.boundBox.height + 0.5;
     }
 
     //テスト
-    getPartsByLabel('テスト',1,cassette).param.text = pSei.param.font;
+    getPartsByLabel('テスト',1,cassette).editReferencePoint('left-center',keepReferencePointPosition = true)
+    getPartsByLabel('テスト',1,cassette).transform.translateX = pMei.transform.translateX;
 
     //肩書きが空の場合段落を詰める
     def titleList = [title1,title2,title3];

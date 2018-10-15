@@ -241,10 +241,11 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     if (foundIndex < 0){
       //姓ルビ配置(センター)
       if(seiruby){
+        pSeiRuby.editReferencePoint('center-center',keepReferencePointPosition = false);
         def seirubyX = pSei.transform.translateX + pSei.boundBox.width / 2;
         pSeiRuby.transform.translateX = seirubyX;
         pSeiRuby.param.maxWidth = pSei.boundBox.width;
-        def seirubyY = pSei.transform.translateY - pSei.boundBox.height + 0.5;
+        def seirubyY = pSei.transform.translateY - pSei.boundBox.height - 0.5;
         pSeiRuby.transform.translateY = seirubyY;
         pSeiRuby.param.size = rubySize;
         pSeiRuby.param.font = rubyFont;
@@ -279,17 +280,18 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       pSeiRuby.param.text = '<p>' + seiRubyText + '</p>';
       pSeiRuby.editReferencePoint('left',keepReferencePointPosition = false);
       pSeiRuby.transform.translateX = pSei.transform.translateX;
-      pSeiRuby.transform.translateY = pSei.transform.translateY - pSei.boundBox.height + 0.5;
+      pSeiRuby.transform.translateY = pSei.transform.translateY - pSei.boundBox.height + 1;
     }
 
     foundIndex = meiruby.indexOf(searchWord);
     if (foundIndex < 0){
       //名ルビ配置(センター)
       if(meiruby){
+        pMeiRuby.editReferencePoint('center-center',keepReferencePointPosition = false);
         def meirubyX = pMei.transform.translateX + pMei.boundBox.width / 2;
         pMeiRuby.transform.translateX = meirubyX;
         pMeiRuby.param.maxWidth = pMei.boundBox.width;
-        def meirubyY = pMei.transform.translateY - pMei.boundBox.height + 0.5;
+        def meirubyY = pMei.transform.translateY - pMei.boundBox.height - 0.5;
         pMeiRuby.transform.translateY = meirubyY;
         pMeiRuby.param.size = rubySize;
         pMeiRuby.param.font = rubyFont;
@@ -323,12 +325,12 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       pMeiRuby.param.font = rubyFont;
       pMeiRuby.param.text = '<p>' + meiRubyText + '</p>';
       pMeiRuby.transform.translateX = pMei.transform.translateX;
-      pMeiRuby.transform.translateY = pMei.transform.translateY - pMei.boundBox.height + 0.5;
+      pMeiRuby.transform.translateY = pMei.transform.translateY - pMei.boundBox.height + 1;
     }
 
     //テスト
-    getPartsByLabel('テスト',1,cassette).editReferencePoint('left-center',keepReferencePointPosition = true)
-    getPartsByLabel('テスト',1,cassette).transform.translateX = pMei.transform.translateX;
+    getPartsByLabel('テスト',1,cassette).editReferencePoint('left-center',keepReferencePointPosition = true);
+    getPartsByLabel('テスト',1,cassette).param.text = pSeiRuby.transform.translateY ;
 
     //肩書きが空の場合段落を詰める
     def titleList = [title1,title2,title3];

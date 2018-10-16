@@ -100,22 +100,22 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       string += contentsList[i] + '\n';
     }
     pContents.param.text = string + contentsList[l];
+
     //おすすめ商品
-    def recommendItem1 = record['おすすめ商品1'];
+    def recommendItem1 = record['おすすめ商品名1'];
     def recommendItemlist =[
-      [ナチュラルダイエット,'3e11d72bc0a800293d76e3e80807dc2f'],
-      [贅沢キャットフード,'7a90368ac0a8002928a86ce215866858'],
-      [バランスドッグフード,'7a8ffcf5c0a800292fd5f77a4be496e7'],
-      [お出かけキャリー,'7a90778fc0a800297c8e81053329efc7']
+      ['ナチュラルダイエット','3e11d72bc0a800293d76e3e80807dc2f'],
+      ['贅沢キャットフード','7a90368ac0a8002928a86ce215866858'],
+      ['バランスドッグフード','7a8ffcf5c0a800292fd5f77a4be496e7'],
+      ['お出かけキャリー','7a90778fc0a800297c8e81053329efc7']
     ]
-    def precommendItem1 = getPartsByLabel('おすすめ商品画像', 1, cassette);
-    if (recommendItem1 == recommendItemlist[0][0]){
-      pMap.param.trackingID = recommendItemlist[0][1];
-    }else if(recommendItem1 ==recommendItemlist[1][0]){
-      pMap.param.trackingID = recommendItemlist[1][1];
-    }else if(recommendItem1 ==recommendItemlist[2][0]){
-      precommendItem1.param.trackingID = recommendItemlist[2][1];
+    def pRecommendItem1 = getPartsByLabel('おすすめ商品画像', 1, cassette);
+    for(i=0; i<recommendItemlist.size(); i++){
+      if (recommendItem1 == recommendItemlist[i][0]){
+        pRecommendItem1.param.trackingID = recommendItemlist[i][1];
+      }
     }
+
     //おすすめ商品情報改行
     def recommendInfo = record['おすすめ商品情報'];
     def pRecommendInfo = getPartsByLabel('おすすめ商品情報', 1, cassette);
@@ -145,6 +145,11 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     //カセット「情報枠」入れ替え
     def pInfomation = getPartsByLabel('情報枠', 1, cassette);
     replaceCassette(pInfomation,'5d856ce6c0a8002935c2d6dc214e569a');
+
+    def birthday = record['お誕生日'];
+
+    def test3 = getPartsByLabel('テスト3', 1, cassette);
+    test3.param.text = format.date(new Date(), "yyyy/MM/dd");
 
   }
 }

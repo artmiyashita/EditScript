@@ -49,15 +49,11 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       getPartsByLabel('郵便番号',i+1,cassette).param.text = postnum.substring(i,i+1);
     }
 
-/*
     //テスト
+    /*
     def pTest1 = getPartsByLabel('テスト1', 1, cassette);
-    def pTest2 = getPartsByLabel('テスト2', 1, cassette);
-    pTest2.param.size = 6;
-    pTest1.param.text = pTest2.param.text;
-    pTest2.param.text = '<p><font face="メイリオ"><font size="15pt">テスト2</font></font>です</p>';
+    pTest1.editReferencePoint('top-left',keepReferencePointPosition = true);
 */
-
     //地図
     def map = record['地図'];
     def pMap = getPartsByLabel('地図画像', 1, cassette);
@@ -142,8 +138,8 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       replaceCassette(pInfomation,'7fdda23dc0a800297e2dc9aeae16f5b0');
     }
 
-    def test3 = getPartsByLabel('テスト3', 1, cassette);
-    test3.param.text = '誕生月は'+ birth_m + '月。来月は' + next_m;
+    //def test3 = getPartsByLabel('テスト3', 1, cassette);
+    //test3.param.text = 'Xの倍率：'+ pRecommendItem1.transform.scaleX + '　Yの倍率：' + pRecommendItem1.transform.scaleY;
 
   }
 }

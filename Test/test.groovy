@@ -229,7 +229,6 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       ];
     jidoriBuilder(jidori,sei,mei,pSei,pMei,span,positionX);
 
-
     //ルビの設定
     def rubySize = 5;//ルビの文字サイズ指定(pt)
     def rubyFont = 'FOT-ロダン Pro M';//ルビのフォント
@@ -278,7 +277,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       pSeiRuby.param.size = rubySize;
       pSeiRuby.param.font = rubyFont;
       pSeiRuby.param.text = '<p>' + seiRubyText + '</p>';
-      pSeiRuby.editReferencePoint('left',keepReferencePointPosition = false);
+      pSeiRuby.editReferencePoint('left',keepReferencePointPosition = true);
       pSeiRuby.transform.translateX = pSei.transform.translateX;
       pSeiRuby.transform.translateY = pSei.transform.translateY - pSei.boundBox.height + 1;
     }
@@ -287,7 +286,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     if (foundIndex < 0){
       //名ルビ配置(センター)
       if(meiruby){
-        pMeiRuby.editReferencePoint('center-center',keepReferencePointPosition = false);
+        pMeiRuby.editReferencePoint('center-center',keepReferencePointPosition = true);
         def meirubyX = pMei.transform.translateX + pMei.boundBox.width / 2;
         pMeiRuby.transform.translateX = meirubyX;
         pMeiRuby.param.maxWidth = pMei.boundBox.width;
@@ -329,7 +328,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     }
 
     //テスト
-    getPartsByLabel('テスト',1,cassette).editReferencePoint('left-center',keepReferencePointPosition = true);
+    getPartsByLabel('テスト',1,cassette).editReferencePoint('left',keepReferencePointPosition = true);
     getPartsByLabel('テスト',1,cassette).param.text = pSeiRuby.transform.translateY ;
 
     //肩書きが空の場合段落を詰める
@@ -422,6 +421,10 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     lineheight = 2.5;
     positionY = 51.5;
     paragraphBuilder(addressEngList,pAddressEngList,positionY,linespan,lineheight);
+
+    //社名英字の配置
+    def pCorpnameEng = getPartsByLabel('社名英字',1,cassette);
+    pCorpnameEng.transform.translateY = pAdr1Eng.transform.translateY - pAdr1Eng.boundBox.height;
 
   }
 

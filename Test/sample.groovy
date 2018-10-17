@@ -1,3 +1,8 @@
+import java.util.Calendar;
+import groovy.time.TimeCategory
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+
 def string = "abc/defg/hi";
 def searchWord = "/";
 
@@ -60,29 +65,66 @@ def formatDate = format.format(date);
 println 'Date型' + formatDate;
 */
 
+/*文字列日付を年月日に
 def strdate = '2018/10/9'
 foundIndex = 1;
 wordList = [];
-searchWord = '/';
-foundIndex = strdate.indexOf(searchWord);
-if (foundIndex >= 0){
-  while (foundIndex >= 0){
-    wordList.add(strdate.substring(0,foundIndex));
-    strdate = strdate.substring(foundIndex+1);
-    foundIndex = strdate.indexOf(searchWord);
-  }
-  wordList.add(strdate);
-}
+wordList = strdate.split('/',0);
 def filmdate = wordList[0] + '年' + wordList[1] + '月' + wordList[2] + '日';
 println '撮影日：' + filmdate;
+*/
 
-def pSei = 14.15;//ルビの文字サイズ指定(pt)
-def pSeiRuby = 5;//ルビの文字サイズ指定(pt)
-def seiRubyList = ['タ','イ','ナカ'];
-def a = pSei;
-def b = pSeiRuby;
-def n = seiRubyList.size();
-def seiRubySpan = [];
-seiRubySpan[0] = (a - (b * seiRubyList[0].size()))/2;
+//date型への変更
+testday = new Date("2011/1/1");
+testday = testday//.format("yyyy/MM/dd")
+println testday;
+today = new Date()//.format("yyyy/MM/dd")
+println today;
 
-println seiRubySpan[0]
+//date型の分解
+testday_m = testday.getMonth() + 1;
+println testday_m;
+today_m = today.getMonth() + 1;
+println today_m;
+next_m = today_m + 1;
+if(next_m > 12){next_m=1}
+if(next_m == testday_m){
+  println '来月は誕生月です'
+}else{
+  println '通常'
+}
+
+//TimeCategoryによる計算
+/*
+def acceptedFormat = "yyyy-MM-dd"
+def today = new Date()
+def currentdate = today.format(acceptedFormat)
+
+use(TimeCategory) {
+    def oneYear = today + 1.month
+    println '1年加算：' + oneYear
+
+    def ninetyDays = today + 90.days
+    println '90日加算：' + ninetyDays
+}
+*/
+
+//日付の加算
+/*
+
+
+def now = LocalDateTime.now()
+println now
+def ldt = now.plusDays(10)
+
+def formatter = DateTimeFormatter.ofPattern('yyyy/MM/dd HH:mm:ss.SSS')
+println ldt.format(formatter)
+*/
+
+//日付の比較
+/*
+Date d1 = new GregorianCalendar(2018, 4, 1).getTime();
+Date d2 = new GregorianCalendar(2018, 4, 2).getTime();
+int result = d1.compareTo(d2)
+println result;
+*/

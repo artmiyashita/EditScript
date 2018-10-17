@@ -21,18 +21,8 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
 
   //来店日整形
   def strdate = record['前回来店日'];
-  def foundIndex = 1;
   def wordList = [];
-  def searchWord = '/';
-  foundIndex = strdate.indexOf(searchWord);
-  if (foundIndex >= 0){
-    while (foundIndex >= 0){
-      wordList.add(strdate.substring(0,foundIndex));
-      strdate = strdate.substring(foundIndex+1);
-      foundIndex = strdate.indexOf(searchWord);
-    }
-    wordList.add(strdate);
-  }
+  wordList = strdate.split('/',0);
   def filmdate = wordList[0] + '年' + wordList[1] + '月' + wordList[2] + '日';
   record['撮影日'] = '(' + filmdate  + ' ご来店時に撮影)';
 
@@ -40,9 +30,6 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   def recommendItem2 = record['おすすめ商品名2'];
   def recommendItemPrice = record['おすすめ商品価格'];
   record['おすすめ商品名2価格'] = recommendItem2 + '/' + recommendItemPrice;
-
-  //カセット操作
-  def csi = getCassetteInfo('56cbc640c0a800290ca89109adb58197',2,0);
 
   //基本関数
   labelList.each {
@@ -82,7 +69,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       pMap.param.trackingID = '5bb27d21c0a800294a309bf367bc7c57';
     }
 
-  }else{
+  }else{//以下、裏面の処理
 
     //本文改行
     def pContents = getPartsByLabel('本文', 1, cassette);
@@ -143,13 +130,20 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     pRecommendInfo.param.text =  string + infoList[l];
 
     //カセット「情報枠」入れ替え
-    def pInfomation = getPartsByLabel('情報枠', 1, cassette);
-    replaceCassette(pInfomation,'5d856ce6c0a8002935c2d6dc214e569a');
 
-    def birthday = record['お誕生日'];
+    def birthday = record['お誕生日']
+    birthday = new Date(birthday);
+    def birth_m = birthday.getMonth() + 1;
+    def today = new Date();
+    def next_m = today.getMonth() + 1 + 1;
+    if(next_m == birth_m){
+      def pInfomation = getPartsByLabel('情報枠', 1, cassette);
+      //replaceCassette(pInfomation,'5d856ce6c0a8002935c2d6dc214e569a');
+      replaceCassette(pInfomation,'7fdda23dc0a800297e2dc9aeae16f5b0');
+    }
 
     def test3 = getPartsByLabel('テスト3', 1, cassette);
-    test3.param.text = format.date(new Date(), "yyyy/MM/dd");
+    test3.param.text = '誕生月は'+ birth_m + '月。来月は' + next_m;
 
   }
 }

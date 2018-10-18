@@ -8,17 +8,17 @@ if(!env.multiLayout) {
 
 // <メソッドの定義>
 //改行メソッド
-def newline(text,list,line,count){
+def newline(text,list,string,line,count){
   while (text.length() > count){
     list[line] = text.substring(0,count);
     text = text.substring(count);
     line += 1;
   }
-  list[l] = text;
-  string ='';
-  for (i = 0; i <= l-1; i++){
+  list[line] = text;
+  for (i = 0; i <= line-1; i++){
     string += list[i] + '\n';
   }
+  string + list[line]
 }
 
 //独自の刺し込み処理
@@ -91,6 +91,9 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     def contentsList = [];
     def string = '';
     def l = 0;
+    def limit = 40;
+
+    /*
     while (contents.length() > 40){
       contentsList[l] = contents.substring(0,40);
       contents = contents.substring(40);
@@ -100,7 +103,8 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     for (i=0; i <= l-1; i++){
       string += contentsList[i] + '\n';
     }
-    pContents.param.text = string + contentsList[l];
+    */
+    pContents.param.text = newline(contents,contentsList,string,l,limit);
 
     //おすすめ商品
     def recommendItem1 = record['おすすめ商品名1'];

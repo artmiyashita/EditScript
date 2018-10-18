@@ -54,7 +54,9 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     def pTest1 = getPartsByLabel('テスト1', 1, cassette);
     pTest1.editReferencePoint('top-left',keepReferencePointPosition = true);
 */
+
     //地図
+/*
     def map = record['地図'];
     def pMap = getPartsByLabel('地図画像', 1, cassette);
     if (map =='MAP1'){
@@ -64,6 +66,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     }else if(map =='MAP3'){
       pMap.param.trackingID = '5bb27d21c0a800294a309bf367bc7c57';
     }
+*/
 
   }else{//以下、裏面の処理
 

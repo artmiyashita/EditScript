@@ -6,6 +6,21 @@ if(!env.multiLayout) {
  doProduce(2, env.imageTable); // ページ数 2
 }
 
+// <メソッドの定義>
+//改行メソッド
+def newline(text,list,line,count){
+  while (text.length() > count){
+    list[line] = text.substring(0,count);
+    text = text.substring(count);
+    line += 1;
+  }
+  list[l] = text;
+  string ='';
+  for (i = 0; i <= l-1; i++){
+    string += list[i] + '\n';
+  }
+}
+
 //独自の刺し込み処理
 def myInjectionOne(cassette, record, labelList, imageTable) {
 

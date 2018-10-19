@@ -65,10 +65,9 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     }
 
     //テスト
-    /*
     def pTest1 = getPartsByLabel('テスト1', 1, cassette);
-    pTest1.editReferencePoint('top-left',keepReferencePointPosition = true);
-*/
+    //pTest1.editReferencePoint('top-left',keepReferencePointPosition = true);
+    pTest1.setDisplay("none");
 
     //地図
 /*
@@ -92,18 +91,6 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     def string = '';
     def l = 0;
     def limit = 40;
-
-    /*
-    while (contents.length() > 40){
-      contentsList[l] = contents.substring(0,40);
-      contents = contents.substring(40);
-      l += 1;
-    }
-    contentsList[l] = contents;
-    for (i=0; i <= l-1; i++){
-      string += contentsList[i] + '\n';
-    }
-    */
     pContents.param.text = newline(contents,contentsList,string,l,limit);
 
     //おすすめ商品
@@ -120,13 +107,29 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
         pRecommendItem1.param.trackingID = recommendItemlist[i][1];
       }
     }
-
+    /*
+    def recommendItem1 = record['おすすめ商品名1'];
+    def recommendItemlist =[
+      ['ナチュラルダイエット','8bb3f940c0a800297bb668d676dd05c3'],
+      ['贅沢キャットフード','8bb560a7c0a800293ad193d169149119'],
+      ['バランスドッグフード','8bb8da71c0a8002933740ee5d69b5d82'],
+      ['お出かけキャリー','8bba3a2bc0a8002924f0825061167d4d']
+    ]
+    def pRecommendItem1 = getPartsByLabel('おすすめ商品画像', 1, cassette);
+    for(i=0; i<recommendItemlist.size(); i++){
+      if (recommendItem1 == recommendItemlist[i][0]){
+        //pRecommendItem1.param.trackingID = recommendItemlist[i][1];
+        replaceCassette(pInfomation,recommendItemlist[i][1]);
+      }
+    }
+    */
     //おすすめ商品情報改行
-    def recommendInfo = record['おすすめ商品情報'];
     def pRecommendInfo = getPartsByLabel('おすすめ商品情報', 1, cassette);
+    def recommendInfo = record['おすすめ商品情報'];
     def infoList = [];
     string = '';
     l = 0;
+    limit = 20;
     searchWord = '◆';
     foundIndex = 1;
     foundIndex = recommendInfo.indexOf(searchWord);
@@ -136,19 +139,9 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       foundIndex = recommendInfo.indexOf(searchWord);
       l += 1;
     }
-    while (recommendInfo.length() > 20){
-      infoList[l] = recommendInfo.substring(0,20);
-      recommendInfo = recommendInfo.substring(20);
-      l += 1;
-    }
-    infoList[l] = recommendInfo;
-    for (i = 0; i <= l-1; i++){
-      string += infoList[i] + '\n';
-    }
-    pRecommendInfo.param.text =  string + infoList[l];
+    pRecommendInfo.param.text = newline(recommendInfo,infoList,string,l,limit);
 
     //カセット「情報枠」入れ替え
-
     def birthday = record['お誕生日']
     birthday = new Date(birthday);
     def birth_m = birthday.getMonth() + 1;
@@ -156,12 +149,29 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     def next_m = today.getMonth() + 1 + 1;
     if(next_m == birth_m){
       def pInfomation = getPartsByLabel('情報枠', 1, cassette);
-      //replaceCassette(pInfomation,'5d856ce6c0a8002935c2d6dc214e569a');
-      replaceCassette(pInfomation,'7fdda23dc0a800297e2dc9aeae16f5b0');
+      replaceCassette(pInfomation,'5d856ce6c0a8002935c2d6dc214e569a');
+      //replaceCassette(pInfomation,'7fdda23dc0a800297e2dc9aeae16f5b0');
     }
 
-    //def test3 = getPartsByLabel('テスト3', 1, cassette);
+    //情報枠に情報を記載
+    infoList[];
+    infoList[0] = '一緒にご来店キャンペーン開催中！' + record['動物名'] + 'とご来店になると、50ポイントを進呈します';
+    infoList[1] = birth_m + '生まれの' + record['動物名'] + 'に素敵なプレゼントを差し上げます！このハガキをお持ちください';
+    def info = 0;
+    if(next_m == birth_m){
+      info = 1;
+    }
+    def pInfobar = getPartsByLabel('情報', 1, cassette);
+    contents = infoList[info];
+    contentsList = [];
+    string = '';
+    l = 0;
+    limit = 14;
+    pInfobar.param.text = newline(contents,contentsList,string,l,limit);
+
+    def test3 = getPartsByLabel('テスト3', 1, cassette);
     //test3.param.text = 'Xの倍率：'+ pRecommendItem1.transform.scaleX + '　Yの倍率：' + pRecommendItem1.transform.scaleY;
+    test3.setDisplay("none");
 
   }
 }

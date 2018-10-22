@@ -128,3 +128,11 @@ Date d2 = new GregorianCalendar(2018, 4, 2).getTime();
 int result = d1.compareTo(d2)
 println result;
 */
+
+//四捨五入
+def nowPoint = '106';
+nowPoint = Integer.decode(nowPoint);
+getPoint = nowPoint * 0.1;
+//getPoint = (int)(Math.ceil(nowPoint * 0.1));
+result = getPoint
+println '結果：' + result;

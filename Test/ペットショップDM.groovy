@@ -25,7 +25,7 @@ def newline(text,list,string,line,count){
 def myInjectionOne(cassette, record, labelList, imageTable) {
 
   //郵便番号整形
-  def additionalLabelList = ['郵便バーコード','氏名','撮影日','本文','おすすめ商品名2価格'];
+  def additionalLabelList = ['郵便バーコード','氏名','撮影日','本文','おすすめ商品名2価格','獲得ポイント'];
   postnum = record['郵便番号'].replace('-','');
   record['郵便バーコード'] = postnum;
 
@@ -45,6 +45,11 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   def recommendItem2 = record['おすすめ商品名2'];
   def recommendItemPrice = record['おすすめ商品価格'];
   record['おすすめ商品名2価格'] = recommendItem2 + '/' + recommendItemPrice;
+
+  def nowPoint = record['現在ポイント'];
+  nowPoint = Integer.decode(nowPoint);
+  nowPoint = Math.ceil(nowPoint * 0.1);
+  record['獲得ポイント'] = (int)nowPoint;
 
   //基本関数
   labelList.each {

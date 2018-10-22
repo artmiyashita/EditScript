@@ -328,8 +328,10 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     }
 
     //テスト
-    getPartsByLabel('テスト',1,cassette).editReferencePoint('left',keepReferencePointPosition = true);
-    getPartsByLabel('テスト',1,cassette).param.text = pSeiRuby.transform.translateY ;
+    def test = getPartsByLabel('テスト',1,cassette);
+    test.editReferencePoint('left',keepReferencePointPosition = true);
+    test.param.text = pSeiRuby.transform.translateY ;
+    test.setDisplay("none");
 
     //肩書きが空の場合段落を詰める
     def titleList = [title1,title2,title3];

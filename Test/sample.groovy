@@ -136,3 +136,13 @@ getPoint = nowPoint * 0.1;
 //getPoint = (int)(Math.ceil(nowPoint * 0.1));
 result = getPoint
 println '結果：' + result;
+
+def a='なし'
+switch(a) {
+  case 'りんご':
+    println 'りんごです';
+  break
+  default:
+    println 'りんごではありません';
+  break
+}

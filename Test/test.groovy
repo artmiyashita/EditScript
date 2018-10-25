@@ -68,10 +68,10 @@ def calclines(sumlines,recordList){
 }
 
 //段落自動取詰(下基準)メソッド
-def linespan = 0;
-def lineheight = 0;
-def positionY = 0;
-def positionX = 0;
+def linespan = 0;//mm
+def lineheight = 0;//mm
+def positionY = 0;//mm
+def positionX = 0;//mm
 def paragraphBuilder(recordList,partsList,positionY,linespan,lineheight){
   i = recordList.size() - 1;
   for(i; i>-1; i--){

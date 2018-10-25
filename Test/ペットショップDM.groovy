@@ -147,7 +147,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     //情報枠に情報を記載
     infoList[];
     infoList[0] = '一緒にご来店キャンペーン開催中！' + record['動物名'] + 'とご来店になると、50ポイントを進呈します';
-    infoList[1] = birth_m + '生まれの' + record['動物名'] + 'に素敵なプレゼントを差し上げます！このハガキをお持ちください';
+    infoList[1] = birth_m + '月生まれの' + record['動物名'] + 'に素敵なプレゼントを差し上げます！このハガキをお持ちください';
     def info = 0;
     if(next_m == birth_m){
       info = 1;

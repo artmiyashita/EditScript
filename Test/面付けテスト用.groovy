@@ -3,7 +3,7 @@ env.injectionOne = {cassette, record, labelList, imageTable ->
  myInjectionOne(cassette, record, labelList, imageTable);
 };
 if(!env.multiLayout) {
- doProduce(2, env.imageTable); // ページ数 2
+ doProduce(1, env.imageTable); // ページ数 1
 }
 
 //独自の刺し込み処理
@@ -26,7 +26,8 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
   if(omote != null){
     //表面のパーツ操作スクリプト
     //関連パーツ取得
-
+    def pURL = getPartsByLabel('URL',1,cassette);
+    pURL.transform.translateY = 28;
 
   }
 }

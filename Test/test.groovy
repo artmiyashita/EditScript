@@ -232,7 +232,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     //ルビの設定
     def rubySize = 5;//ルビの文字サイズ指定(pt)
     def rubyFont = 'FOT-ロダン Pro M';//ルビのフォント
-    def rubySpan = pSei.boundBox.height + 0.5;//ルビと氏名の距離
+    def rubySpan = 0.5;//ルビと氏名の距離
     //ルビの条件分岐（モノルビorセンタールビ）
     searchWord = '/';
     foundIndex = seiruby.indexOf(searchWord);
@@ -244,7 +244,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
         def seirubyX = pSei.transform.translateX + pSei.boundBox.width / 2;
         pSeiRuby.transform.translateX = seirubyX;
         pSeiRuby.param.maxWidth = pSei.boundBox.width;
-        def seirubyY = pSei.transform.translateY - rubySpan;
+        def seirubyY = pSei.transform.translateY - pSei.boundBox.height - rubySpan;
         pSeiRuby.transform.translateY = seirubyY;
         pSeiRuby.param.size = rubySize;
         pSeiRuby.param.font = rubyFont;
@@ -278,7 +278,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       pSeiRuby.param.font = rubyFont;
       pSeiRuby.param.text = '<p>' + seiRubyText + '</p>';
       pSeiRuby.transform.translateX = pSei.transform.translateX;
-      pSeiRuby.transform.translateY = pSei.transform.translateY + (rubySize*0.35) - rubySpan;
+      pSeiRuby.transform.translateY = pSei.transform.translateY - pSei.boundBox.height + (rubySize*0.35) - rubySpan;
     }
 
     foundIndex = meiruby.indexOf(searchWord);
@@ -289,7 +289,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
         def meirubyX = pMei.transform.translateX + pMei.boundBox.width / 2;
         pMeiRuby.transform.translateX = meirubyX;
         pMeiRuby.param.maxWidth = pMei.boundBox.width;
-        def meirubyY = pMei.transform.translateY - rubySpan;
+        def meirubyY = pMei.transform.translateY - pSei.boundBox.height - rubySpan;
         pMeiRuby.transform.translateY = meirubyY;
         pMeiRuby.param.size = rubySize;
         pMeiRuby.param.font = rubyFont;
@@ -323,7 +323,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
       pMeiRuby.param.font = rubyFont;
       pMeiRuby.param.text = '<p>' + meiRubyText + '</p>';
       pMeiRuby.transform.translateX = pMei.transform.translateX;
-      pMeiRuby.transform.translateY = pMei.transform.translateY + (rubySize*0.35) - rubySpan;
+      pMeiRuby.transform.translateY = pMei.transform.translateY - pSei.boundBox.height + (rubySize*0.35) - rubySpan;
     }
 
     //テスト

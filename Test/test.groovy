@@ -29,6 +29,7 @@ def jidoriBuilder(jidori,sei,mei,pSei,pMei,span,positionX){
   pSei.transform.translateX = positionX;
   pMei.transform.translateX = positionX + pSei.boundBox.width + smspan;
 }
+
 //半角英数校正:全角英数字記号を半角に訂正
 def fullwidthCorrector(alphanumericChar){
   def string = alphanumericChar.replaceAll(/[\uff01-\uff5f]/){new String((char)(((int)it)-65248))};
@@ -37,6 +38,7 @@ def fullwidthCorrector(alphanumericChar){
 def replacer(string){
   string.replaceAll( /[^\d]/ ,"-");
 }
+
 //電話番号校正:電話番号をxxx(xxxx)xxxx型に訂正
 def telnumBuilder(number){
   def wordList = [];
@@ -54,6 +56,7 @@ def telnumBuilder(number){
     number;
   }
 }
+
 //住所欄段落数計算メソッド
 def sumlines = 0;
 def calclines(sumlines,recordList){
@@ -65,6 +68,52 @@ def calclines(sumlines,recordList){
     }
   }
   sumlines;
+}
+
+//ルビ生成メソッド
+//jidoriNo=姓の場合:3,名の場合:4で変数を渡す
+def rubyMaker(pNameRuby,nameRuby,pName,searchWord,rubySpan,rubySize,rubyFont,jidori,jidoriId,jidoriNo){
+  pNameRuby.param.size = rubySize;
+  pNameRuby.param.font = rubyFont;
+  foundIndex = nameRuby.indexOf(searchWord);
+  if (foundIndex < 0){
+    //姓ルビ(センター)配置
+    if(nameRuby){
+      pNameRuby.editReferencePoint('center-center',keepReferencePointPosition = false);
+      pNameRuby.transform.translateX = pName.transform.translateX + pName.boundBox.width / 2;
+      pNameRuby.param.maxWidth = pName.boundBox.width;
+      pNameRuby.transform.translateY = pName.transform.translateY - pName.boundBox.height - rubySpan;
+    }
+  } else {
+    //姓ルビ(モノルビ)配置
+    //姓ルビ(モノルビ)を区切り文字”/”で分解、配列に追加
+    def nameRubyList = [];
+    while (foundIndex >= 0){
+      nameRubyList.push(nameRuby.substring(0, foundIndex));
+      nameRuby = nameRuby.substring(foundIndex+1);
+      foundIndex = nameRuby.indexOf(searchWord);
+    }
+    nameRubyList.push(nameRuby);
+    //姓ルビ(モノルビ)間の距離を算出
+    def a = pName.param.size;
+    def b = rubySize;
+    def c = jidori[jidoriId][jidoriNo];
+    def n = nameRubyList.size();
+    def nameRubySpan = [];
+    nameRubySpan[0] = (a - (b * nameRubyList[0].size()))/2;
+    for (i=1; i<n; i++){
+      nameRubySpan[i] = c + (2 * a - (b * (nameRubyList[i-1].size() + nameRubyList[i].size())))/2;
+    }
+    //姓ルビ(モノルビ)テキストの生成と配置
+    def nameRubyText = '';
+    for (i=0; i<n ; i++){
+      nameRubyText += '<font size="' + nameRubySpan[i] + 'pt">　</font>' + nameRubyList[i];
+    }
+    pNameRuby.param.text = '<p>' + nameRubyText + '</p>';
+    pNameRuby.transform.translateX = pName.transform.translateX;
+    pNameRuby.transform.translateY = pName.transform.translateY - pName.boundBox.height + (rubySize*0.35) - rubySpan;
+  }
+  r = pNameRuby;
 }
 
 //段落自動取詰(下基準)メソッド
@@ -83,52 +132,6 @@ def paragraphBuilder(recordList,partsList,positionY,linespan,lineheight){
       linespan += lineheight;
     }
   }
-}
-
-//ルビ生成メソッド
-//jidoriNo=姓の場合:3,名の場合:4で変数を渡す
-def rubyMaker(pSeiRuby,seiruby,pSei,searchWord,rubySpan,rubySize,rubyFont,jidori,jidoriId,jidoriNo){
-  pSeiRuby.param.size = rubySize;
-  pSeiRuby.param.font = rubyFont;
-  foundIndex = seiruby.indexOf(searchWord);
-  if (foundIndex < 0){
-    //姓ルビ(センター)配置
-    if(seiruby){
-      pSeiRuby.editReferencePoint('center-center',keepReferencePointPosition = false);
-      pSeiRuby.transform.translateX = pSei.transform.translateX + pSei.boundBox.width / 2;
-      pSeiRuby.param.maxWidth = pSei.boundBox.width;
-      pSeiRuby.transform.translateY = pSei.transform.translateY - pSei.boundBox.height - rubySpan;
-    }
-  } else {
-    //姓ルビ(モノルビ)配置
-    //姓ルビ(モノルビ)を区切り文字”/”で分解、配列に追加
-    def seiRubyList = [];
-    while (foundIndex >= 0){
-      seiRubyList.push(seiruby.substring(0, foundIndex));
-      seiruby = seiruby.substring(foundIndex+1);
-      foundIndex = seiruby.indexOf(searchWord);
-    }
-    seiRubyList.push(seiruby);
-    //姓ルビ(モノルビ)間の距離を算出
-    def a = pSei.param.size;
-    def b = rubySize;
-    def c = jidori[jidoriId][jidoriNo];
-    def n = seiRubyList.size();
-    def seiRubySpan = [];
-    seiRubySpan[0] = (a - (b * seiRubyList[0].size()))/2;
-    for (i=1; i<n; i++){
-      seiRubySpan[i] = c + (2 * a - (b * (seiRubyList[i-1].size() + seiRubyList[i].size())))/2;
-    }
-    //姓ルビ(モノルビ)テキストの生成と配置
-    def seiRubyText = '';
-    for (i=0; i<n ; i++){
-      seiRubyText += '<font size="' + seiRubySpan[i] + 'pt">　</font>' + seiRubyList[i];
-    }
-    pSeiRuby.param.text = '<p>' + seiRubyText + '</p>';
-    pSeiRuby.transform.translateX = pSei.transform.translateX;
-    pSeiRuby.transform.translateY = pSei.transform.translateY - pSei.boundBox.height + (rubySize*0.35) - rubySpan;
-  }
-  r = pSeiRuby;
 }
 
 //独自の刺し込み処理

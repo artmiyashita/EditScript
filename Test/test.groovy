@@ -85,7 +85,9 @@ def paragraphBuilder(recordList,partsList,positionY,linespan,lineheight){
   }
 }
 
-def seiRubyMaker(pSeiRuby,rubySpan,pSei,seiruby,searchWord,rubySize,jidori,jidoriId){
+//ルビメソッド
+//jidoriNo=姓の場合:3,名の場合:4で変数を渡す
+def rubyMaker(pSeiRuby,rubySpan,pSei,seiruby,searchWord,rubySize,jidori,jidoriId,jidoriNo){
   foundIndex = seiruby.indexOf(searchWord);
   if (foundIndex < 0){
     //姓ルビ(センター)配置
@@ -108,7 +110,7 @@ def seiRubyMaker(pSeiRuby,rubySpan,pSei,seiruby,searchWord,rubySize,jidori,jidor
     //姓ルビ(モノルビ)間の距離を算出
     def a = pSei.param.size;
     def b = rubySize;
-    def c = jidori[jidoriId][3];
+    def c = jidori[jidoriId][jidoriNo];
     def n = seiRubyList.size();
     def seiRubySpan = [];
     seiRubySpan[0] = (a - (b * seiRubyList[0].size()))/2;
@@ -278,52 +280,14 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     searchWord = '/';
     pSeiRuby.param.size = pMeiRuby.param.size = rubySize;
     pSeiRuby.param.font = pMeiRuby.param.font = rubyFont;
-    //性ルビの関数
-    pSeiRuby = seiRubyMaker(pSeiRuby,rubySpan,pSei,seiruby,searchWord,rubySize,jidori,jidoriId)
-    
-    //名ルビの条件分岐（モノルビorセンタールビ）
-    foundIndex = meiruby.indexOf(searchWord);
-    if (foundIndex < 0){
-      //名ルビ(センター)配置
-      if(meiruby){
-        pMeiRuby.editReferencePoint('center-center',keepReferencePointPosition = true);
-        pMeiRuby.transform.translateX = pMei.transform.translateX + pMei.boundBox.width / 2;
-        pMeiRuby.param.maxWidth = pMei.boundBox.width;
-        pMeiRuby.transform.translateY = pMei.transform.translateY - pSei.boundBox.height - rubySpan;
-      }
-    } else {
-      //名ルビ(モノルビ)配置
-      //名ルビ(モノルビ)を区切り文字”/”で分解、配列に追加
-      def meiRubyList = [];
-      while (foundIndex >= 0){
-        meiRubyList.push(meiruby.substring(0, foundIndex));
-        meiruby = meiruby.substring(foundIndex+1);
-        foundIndex = meiruby.indexOf(searchWord);
-      }
-      meiRubyList.push(meiruby);
-      //名ルビ(モノルビ)間の距離を算出
-      def a = pMei.param.size;
-      def b = rubySize;
-      def c = jidori[jidoriId][3];
-      def n = meiRubyList.size();
-      def meiRubySpan = [];
-      meiRubySpan[0] = (a - (b * meiRubyList[0].size()))/2;
-      for (i=1; i<n; i++){
-        meiRubySpan[i] = c + (2 * a - (b * (meiRubyList[i-1].size() + meiRubyList[i].size())))/2;
-      }
-      //名ルビ(モノルビ)テキストの生成と配置
-      def meiRubyText = '';
-      for (i=0; i<n ; i++){
-        meiRubyText += '<font size="' + meiRubySpan[i] + 'pt">　</font>' + meiRubyList[i];
-      }
-      pMeiRuby.param.text = '<p>' + meiRubyText + '</p>';
-      pMeiRuby.transform.translateX = pMei.transform.translateX;
-      pMeiRuby.transform.translateY = pMei.transform.translateY - pSei.boundBox.height + (rubySize*0.35) - rubySpan;
-    }
+    //姓ルビの関数
+    pSeiRuby = rubyMaker(pSeiRuby,rubySpan,pSei,seiruby,searchWord,rubySize,jidori,jidoriId,3)
+    //名ルビの関数
+    pMeiRuby = rubyMaker(pMeiRuby,rubySpan,pMei,meiruby,searchWord,rubySize,jidori,jidoriId,4)
 
     //テスト
     def test = getPartsByLabel('テスト',1,cassette);
-    //test.setDisplay("none");
+    test.setDisplay("none");
 
 
     //肩書きが空の場合段落を詰める

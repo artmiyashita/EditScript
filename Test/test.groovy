@@ -85,9 +85,11 @@ def paragraphBuilder(recordList,partsList,positionY,linespan,lineheight){
   }
 }
 
-//ルビメソッド
+//ルビ生成メソッド
 //jidoriNo=姓の場合:3,名の場合:4で変数を渡す
-def rubyMaker(pSeiRuby,rubySpan,pSei,seiruby,searchWord,rubySize,jidori,jidoriId,jidoriNo){
+def rubyMaker(pSeiRuby,seiruby,pSei,searchWord,rubySpan,rubySize,rubyFont,jidori,jidoriId,jidoriNo){
+  pSeiRuby.param.size = rubySize;
+  pSeiRuby.param.font = rubyFont;
   foundIndex = seiruby.indexOf(searchWord);
   if (foundIndex < 0){
     //姓ルビ(センター)配置
@@ -278,12 +280,11 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     def rubyFont = 'FOT-ロダン Pro M';//ルビのフォント
     def rubySpan = 0.5;//ルビと氏名の距離
     searchWord = '/';
-    pSeiRuby.param.size = pMeiRuby.param.size = rubySize;
-    pSeiRuby.param.font = pMeiRuby.param.font = rubyFont;
+
     //姓ルビの関数
-    pSeiRuby = rubyMaker(pSeiRuby,rubySpan,pSei,seiruby,searchWord,rubySize,jidori,jidoriId,3)
+    pSeiRuby = rubyMaker(pSeiRuby,seiruby,pSei,searchWord,rubySpan,rubySize,rubyFont,jidori,jidoriId,3)
     //名ルビの関数
-    pMeiRuby = rubyMaker(pMeiRuby,rubySpan,pMei,meiruby,searchWord,rubySize,jidori,jidoriId,4)
+    pMeiRuby = rubyMaker(pMeiRuby,meiruby,pMei,searchWord,rubySpan,rubySize,rubyFont,jidori,jidoriId,4)
 
     //テスト
     def test = getPartsByLabel('テスト',1,cassette);

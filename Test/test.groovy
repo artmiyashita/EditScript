@@ -113,7 +113,7 @@ def rubyMaker(pNameRuby,nameRuby,pName,searchWord,rubySpan,rubySize,rubyFont,jid
     pNameRuby.transform.translateX = pName.transform.translateX;
     pNameRuby.transform.translateY = pName.transform.translateY - pName.boundBox.height + (rubySize*0.35) - rubySpan;
   }
-  r = pNameRuby;
+  pNameRuby;
 }
 
 //段落自動取詰(下基準)メソッド

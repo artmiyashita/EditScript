@@ -129,36 +129,45 @@ def seiRubyBuilder(seiruby,searchWord,pSeiRuby,pSei,rubySize,jidori,jidoriId){
 
 def function(pSeiRuby,rubySpan,pSei,seiruby,searchWord,rubySize,jidori,jidoriId){
   foundIndex = seiruby.indexOf(searchWord);
-  if (foundIndex > 0){
-        //姓ルビ(モノルビ)配置
-        //姓ルビ(モノルビ)を区切り文字”/”で分解、配列に追加
-        def seiRubyList = [];
-        while (foundIndex >= 0){
-          seiRubyList.push(seiruby.substring(0, foundIndex));
-          seiruby = seiruby.substring(foundIndex+1);
-          foundIndex = seiruby.indexOf(searchWord);
-        }
-        seiRubyList.push(seiruby);
-        //姓ルビ(モノルビ)間の距離を算出
-        def a = pSei.param.size;
-        def b = rubySize;
-        def c = jidori[jidoriId][3];
-        def n = seiRubyList.size();
-        def seiRubySpan = [];
-        seiRubySpan[0] = (a - (b * seiRubyList[0].size()))/2;
-        for (i=1; i<n; i++){
-          seiRubySpan[i] = c + (2 * a - (b * (seiRubyList[i-1].size() + seiRubyList[i].size())))/2;
-        }
-        //姓ルビ(モノルビ)テキストの生成と配置
-        def seiRubyText = '';
-        for (i=0; i<n ; i++){
-          seiRubyText += '<font size="' + seiRubySpan[i] + 'pt">　</font>' + seiRubyList[i];
-        }
-        pSeiRuby.param.text = '<p>' + seiRubyText + '</p>';
-        pSeiRuby.transform.translateX = pSei.transform.translateX;
-        pSeiRuby.transform.translateY = pSei.transform.translateY - pSei.boundBox.height + (rubySize*0.35) - rubySpan;
-        pSeiRuby.param.text = "ルビのテスト";
-      }
+  if (foundIndex < 0){
+    //姓ルビ(センター)配置
+    if(seiruby){
+      pSeiRuby.editReferencePoint('center-center',keepReferencePointPosition = false);
+      pSeiRuby.transform.translateX = pSei.transform.translateX + pSei.boundBox.width / 2;
+      pSeiRuby.param.maxWidth = pSei.boundBox.width;
+      pSeiRuby.transform.translateY = pSei.transform.translateY - pSei.boundBox.height - rubySpan;
+      pSeiRuby.param.text = "ルビのテスト";
+    }
+  } else {
+    //姓ルビ(モノルビ)配置
+    //姓ルビ(モノルビ)を区切り文字”/”で分解、配列に追加
+    def seiRubyList = [];
+    while (foundIndex >= 0){
+      seiRubyList.push(seiruby.substring(0, foundIndex));
+      seiruby = seiruby.substring(foundIndex+1);
+      foundIndex = seiruby.indexOf(searchWord);
+    }
+    seiRubyList.push(seiruby);
+    //姓ルビ(モノルビ)間の距離を算出
+    def a = pSei.param.size;
+    def b = rubySize;
+    def c = jidori[jidoriId][3];
+    def n = seiRubyList.size();
+    def seiRubySpan = [];
+    seiRubySpan[0] = (a - (b * seiRubyList[0].size()))/2;
+    for (i=1; i<n; i++){
+      seiRubySpan[i] = c + (2 * a - (b * (seiRubyList[i-1].size() + seiRubyList[i].size())))/2;
+    }
+    //姓ルビ(モノルビ)テキストの生成と配置
+    def seiRubyText = '';
+    for (i=0; i<n ; i++){
+      seiRubyText += '<font size="' + seiRubySpan[i] + 'pt">　</font>' + seiRubyList[i];
+    }
+    pSeiRuby.param.text = '<p>' + seiRubyText + '</p>';
+    pSeiRuby.transform.translateX = pSei.transform.translateX;
+    pSeiRuby.transform.translateY = pSei.transform.translateY - pSei.boundBox.height + (rubySize*0.35) - rubySpan;
+    pSeiRuby.param.text = "ルビのテスト";
+  }
   r = pSeiRuby;
 }
 

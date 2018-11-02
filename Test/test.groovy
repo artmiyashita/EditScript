@@ -127,12 +127,17 @@ def seiRubyBuilder(seiruby,searchWord,pSeiRuby,pSei,rubySize,jidori,jidoriId){
   r = pSeiRuby;
 }
 
-def function(pSeiRuby,rubySpan,pSei){
-  pSeiRuby.editReferencePoint('center-center',keepReferencePointPosition = false);
-  pSeiRuby.transform.translateX = pSei.transform.translateX + pSei.boundBox.width / 2;
-  pSeiRuby.param.maxWidth = pSei.boundBox.width;
-  pSeiRuby.transform.translateY = pSei.transform.translateY - pSei.boundBox.height - rubySpan;
-  pSeiRuby.param.text = "ルビのテスト";
+def function(pSeiRuby,rubySpan,pSei,seiruby,searchWord){
+  foundIndex = seiruby.indexOf(searchWord);
+  if (foundIndex < 0){
+    if(seiruby){
+      pSeiRuby.editReferencePoint('center-center',keepReferencePointPosition = false);
+      pSeiRuby.transform.translateX = pSei.transform.translateX + pSei.boundBox.width / 2;
+      pSeiRuby.param.maxWidth = pSei.boundBox.width;
+      pSeiRuby.transform.translateY = pSei.transform.translateY - pSei.boundBox.height - rubySpan;
+      pSeiRuby.param.text = "ルビのテスト";
+    }
+  }
   r = pSeiRuby;
 }
 
@@ -370,7 +375,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
 
     //テスト
     def test = getPartsByLabel('テスト',1,cassette);
-    test = function(test,rubySpan,pSei);
+    test = function(test,rubySpan,pSei,seiruby,searchWord);
     //test.setDisplay("none");
 
 

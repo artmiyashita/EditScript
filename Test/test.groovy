@@ -79,7 +79,7 @@ def rubyMaker(pNameRuby,nameRuby,pName,searchWord,rubySpan,rubySize,rubyFont,jid
   if (foundIndex < 0){
     //姓ルビ(センター)配置
     if(nameRuby){
-      pNameRuby.editReferencePoint('center-center',keepReferencePointPosition = false);
+      pNameRuby.editReferencePoint('lower-center',keepReferencePointPosition = false);
       pNameRuby.transform.translateX = pName.transform.translateX + pName.boundBox.width / 2;
       pNameRuby.param.maxWidth = pName.boundBox.width;
       pNameRuby.transform.translateY = pName.transform.translateY - pName.boundBox.height - rubySpan;
@@ -110,8 +110,9 @@ def rubyMaker(pNameRuby,nameRuby,pName,searchWord,rubySpan,rubySize,rubyFont,jid
       nameRubyText += '<font size="' + nameRubySpan[i] + 'pt">　</font>' + nameRubyList[i];
     }
     pNameRuby.param.text = '<p>' + nameRubyText + '</p>';
+    pNameRuby.editReferencePoint('lower-left',keepReferencePointPosition = false);
     pNameRuby.transform.translateX = pName.transform.translateX;
-    pNameRuby.transform.translateY = pName.transform.translateY - pName.boundBox.height + (rubySize*0.35) - rubySpan;
+    pNameRuby.transform.translateY = pName.transform.translateY - pName.boundBox.height - rubySpan;
   }
   pNameRuby;
 }
@@ -281,7 +282,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     //ルビの設定
     def rubySize = 5;//ルビの文字サイズ指定(pt)
     def rubyFont = 'FOT-ロダン Pro M';//ルビのフォント
-    def rubySpan = 0.5;//ルビと氏名の距離
+    def rubySpan = -1;//ルビと氏名の距離
     searchWord = '/';
 
     //姓ルビの関数

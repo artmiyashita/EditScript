@@ -82,7 +82,7 @@ def rubyMaker(pNameRuby,nameRuby,pName,searchWord,rubySpan,rubySize,rubyFont,jid
       pNameRuby.editReferencePoint('lower-center',keepReferencePointPosition = false);
       pNameRuby.transform.translateX = pName.transform.translateX + pName.boundBox.width / 2;
       pNameRuby.param.maxWidth = pName.boundBox.width;
-      pNameRuby.transform.translateY = pName.transform.translateY - pName.boundBox.height - rubySpan;
+      pNameRuby.transform.translateY = pName.transform.translateY - pName.param.size * 0.35 - rubySpan;
     }
   } else {
     //姓ルビ(モノルビ)配置
@@ -112,7 +112,7 @@ def rubyMaker(pNameRuby,nameRuby,pName,searchWord,rubySpan,rubySize,rubyFont,jid
     pNameRuby.param.text = '<p>' + nameRubyText + '</p>';
     pNameRuby.editReferencePoint('lower-left',keepReferencePointPosition = false);
     pNameRuby.transform.translateX = pName.transform.translateX;
-    pNameRuby.transform.translateY = pName.transform.translateY - pName.boundBox.height - rubySpan;
+    pNameRuby.transform.translateY = pName.transform.translateY - pName.param.size * 0.35 - rubySpan + 0.5;
   }
   pNameRuby;
 }
@@ -282,7 +282,7 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     //ルビの設定
     def rubySize = 5;//ルビの文字サイズ指定(pt)
     def rubyFont = 'FOT-ロダン Pro M';//ルビのフォント
-    def rubySpan = -1;//ルビと氏名の距離
+    def rubySpan = 0.5;//ルビと氏名の距離
     searchWord = '/';
 
     //姓ルビの関数
@@ -292,8 +292,9 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
 
     //テスト
     def test = getPartsByLabel('テスト',1,cassette);
+    test.param.text = pSei.transform.translateY;
+    test.transform.translateY = pSei.transform.translateY;
     test.setDisplay("none");
-
 
     //肩書きが空の場合段落を詰める
     def titleList = [title1,title2,title3];

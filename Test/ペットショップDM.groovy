@@ -101,16 +101,17 @@ def myInjectionOne(cassette, record, labelList, imageTable) {
     //おすすめ商品
     def recommendItem1 = record['おすすめ商品名1'];
     def recommendItemlist2 =[
-      ['ナチュラルダイエット','8bb3f940c0a800297bb668d676dd05c3'],
-      ['贅沢キャットフード','8bb560a7c0a800293ad193d169149119'],
-      ['バランスドッグフード','8bb8da71c0a8002933740ee5d69b5d82'],
-      ['お出かけキャリー','8bba3a2bc0a8002924f0825061167d4d']
+      ['ナチュラルダイエット','3e11d72bc0a800293d76e3e80807dc2f'],
+      ['贅沢キャットフード','7a90368ac0a8002928a86ce215866858'],
+      ['バランスドッグフード','7a8ffcf5c0a800292fd5f77a4be496e7'],
+      ['お出かけキャリー','7a90778fc0a800297c8e81053329efc7']
     ]
     def pRecommendItem1 = getPartsByLabel('おすすめ商品画像', 1, cassette);
     for(i=0; i<recommendItemlist2.size(); i++){
       if (recommendItem1 == recommendItemlist2[i][0]){
-        //pRecommendItem1.param.trackingID = recommendItemlist[i][1];
-        replaceCassette(pRecommendItem1,recommendItemlist2[i][1]);
+        pRecommendItem1.param.preserveAspectRatio = "xMidYMid meet";
+        pRecommendItem1.param.trackingID = recommendItemlist2[i][1];
+        //replaceCassette(pRecommendItem1,recommendItemlist2[i][1]);
       }
     }
 

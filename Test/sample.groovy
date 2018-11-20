@@ -137,12 +137,7 @@ getPoint = nowPoint * 0.1;
 result = getPoint
 println '結果：' + result;
 
-def a='なし'
-switch(a) {
-  case 'りんご':
-    println 'りんごです';
-  break
-  default:
-    println 'りんごではありません';
-  break
-}
+
+def tameshi="03-12345";
+result = tameshi.substring(1,tameshi.size());
+println result;

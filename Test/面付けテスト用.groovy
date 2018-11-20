@@ -9,6 +9,8 @@ if(!env.multiLayout) {
 //独自の刺し込み処理
 def myInjectionOne(cassette, record, labelList, imageTable) {
 
+  //def additionalLabelList = [''];
+
   //基本関数
   labelList.each {
     injectionOneParts(cassette, it , record, imageTable);
